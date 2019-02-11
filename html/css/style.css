@@ -1,0 +1,55 @@
+.main {
+    margin-top: 75px;
+    margin-left: 85px;
+    margin-right: 150px;
+}
+.container {
+    border-style: solid; 
+    border-width: 1px;
+    border-color: lightgray;
+    height: 35px;
+    display: flex;
+}
+#checkout {
+    flex-grow: 1;
+    font-weight: bold;
+}
+#menu {
+    flex-grow: 2;
+}
+#payment {
+    font-weight: bold;
+}
+.block {
+    border-style: solid; 
+    border-width: 1px;
+    border-color: lightgray;
+    height: 35px;
+    display: flex;
+}
+#payBlock {
+    flex-grow: 3;
+}
+#cardBlock {
+    flex-grow: 2;
+    background-color: lightgray;
+}
+#option li:after {
+    content: "/";
+    padding: 7px;
+}
+#option li:last-child:after {
+    content: "";
+}
+#option {
+    padding: 7px;
+}
+#option li{
+    display: inline;
+}
+p {
+    padding: 7px;
+}
+i {
+    padding: 7px;
+}
