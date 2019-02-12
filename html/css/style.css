@@ -2,6 +2,7 @@
     margin-top: 75px;
     margin-left: 85px;
     margin-right: 150px;
+    box-shadow: 5px 5px 10px;
 }
 .container {
     border-style: solid; 
