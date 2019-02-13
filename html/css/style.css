@@ -11,7 +11,7 @@
 }
 .block--upper {
     display: flex;
-    height: 30px;
+    max-height: 30px;
 }
 .breadcrumbs li{
     display: inline;
