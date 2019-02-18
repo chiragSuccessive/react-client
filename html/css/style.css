@@ -14,7 +14,7 @@ html {
 }
 .block--upper {
     display: flex;
-    max-height: 30px;
+    height: 4.5%;
 }
 .breadcrumbs li{
     display: inline;
@@ -39,13 +39,14 @@ html {
 .block--lower {
     border-top: 0.5px solid lightgray;
     display: flex;
-    height: 600px;
 }
 .block--lower__payment {
-    flex: 5;
+    height: 100%;
+    flex: 3;
 }
 .block--lower__cart {
-    flex: 3;
+    height: 100%;
+    flex: 2;
     display: flex;
     flex-direction: column;
     background-color: lightgray;
@@ -53,7 +54,7 @@ html {
 .block {
     background-color: white;
     border: 0.5px solid lightgray;
-    margin: 70px;
+    margin: 70px 100px;
     box-shadow: 5px 10px 8px #888888;
 }
 #close {
@@ -63,51 +64,51 @@ h1 {
     padding: 7px;
 }
 .image--cards {
-    width: 200px;
-    
+    width: 90%;
+    padding: 5px;
+}
+.image--active {
+    border: 0.5px solid grey;
+    background-color: lightgray;
 }
 #card-name {
     border: 0.5px solid lightgray;
     padding: 4px;
     border-radius: 4px;
-    width: 300px;
+    width: 95%;
     height: 40px;
     margin: 5px;
-    margin-left: 300px;
 }
 #card-number {
     border: 0.5px solid lightgray;
     border-radius: 4px;
     padding: 4px;
-    width: 300px;
+    width: 95%;
     height: 40px;
     margin: 5px;
-    margin-left: 300px;
 }
 #card-date {
     border: 0.5px solid lightgray;
     border-radius: 4px;
     padding: 4px;
-    width: 143px;
+    width: 45%;
     height: 40px;
     margin: 5px;
-    margin-left: 300px;
 }
 #card-cvv {
     border: 0.5px solid lightgray;
     border-radius: 4px;
     padding: 4px;
-    width: 143px;
+    width: 45%;
     height: 40px;
     margin: 5px;
 }
 #card-submit {
     border-radius: 4px;
     padding: 4px;
-    width: 300px;
+    width: 95%;
     height: 40px;
     margin: 5px;
-    margin-left: 300px;
     color: white;
     border: 0.5px solid  rgb(64, 243, 64);
     background-color: rgb(64, 243, 64);
@@ -154,9 +155,9 @@ h5 {
     padding: 5px;
     font-weight: bold;
 }
-.root {
+.main {
     border: 0.5px solid white;
-    background-image: url("../images/background/background.jpg");
+    background-image: url("../images/products/background.jpg");
     height: 100%;
     background-size: cover;
 }
@@ -180,3 +181,49 @@ h6 {
 .items-total div {
     flex: 1;
 }
+.card-details div {
+    width: 40%;
+}
+.card-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+@media only screen and (max-width: 992px) {
+    .block {
+        margin: 70px 20px;
+    }
+    .block--lower__payment {
+        flex: 1;
+    }
+    .block--lower__cart {
+        flex: 1;
+    }
+}
+@media only screen and (max-width: 768px) {
+    .breadcrumbs{
+        display: none;
+    }
+}
+@media only screen and (max-width: 600px) {
+    .block--lower {
+        flex-direction: column-reverse;
+    }
+}
+@media only screen and (min-width: 600px) {
+    .block--lower {
+        height: 75%;
+    }
+}
+@media only screen and (max-width: 400px) {
+    .image {
+        flex-direction: column;
+    }
+}
+.card-details--date-cvv {
+    display: flex;
+}
+.items--line {
+    margin-top: 30px;
+}
+
