@@ -13,14 +13,14 @@ class Slider extends Component {
   }
 
   componentDidMount() {
-    const { duration, random } = this.props;
+    const { duration, random, banners } = this.props;
     let value;
     this.interval = setInterval(() => {
       const { index } = this.state;
       if (random) {
-        value = getRandomNumber(6);
+        value = getRandomNumber(banners.length);
       } else {
-        value = getNextRoundRobin(6, index);
+        value = getNextRoundRobin(banners.length, index);
       }
       this.setState({ index: value });
     }, duration);
