@@ -9,8 +9,5 @@ const style = {
   errorColor: {
     color: 'red',
   },
-  errorBorder: {
-    border: '1px solid red',
-  },
 };
 export default style;

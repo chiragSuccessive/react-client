@@ -8,7 +8,7 @@ const TextField = (props) => {
   return (
     <>
       <input type="text" {...rest} style={{ ...style.base, ...errorBorder }} />
-      {error ? <info style={style.errorColor}>{error}</info> : ''}
+      {error ? <p style={style.errorColor}>{error}</p> : ''}
     </>
   );
 };
