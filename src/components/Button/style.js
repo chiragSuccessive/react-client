@@ -2,7 +2,7 @@ const style = {
   base: {
     margin: '5px',
     padding: '10px',
-    textAlign: 'right',
+    borderRadius: '4px',
   },
 };
 export default style;

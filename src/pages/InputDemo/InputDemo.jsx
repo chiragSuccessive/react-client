@@ -9,9 +9,9 @@ import {
 import * as constants from '../../config/constants';
 
 const schema = yup.object().shape({
-  name: yup.string().min(3).required(),
-  sports: yup.string().required(),
-  sportsValue: yup.string().required(),
+  name: yup.string().min(3).required().label('Name'),
+  sports: yup.string().required().label('Sport'),
+  sportsValue: yup.string().required().label('What you do'),
 });
 
 class InputDemo extends Component {
@@ -40,8 +40,13 @@ class InputDemo extends Component {
   }
 
   handleValue = item => (event) => {
-    const { error, isTouched } = this.state;
-    this.setState({ [item]: event.target.value, error: { ...error, [item]: '' }, isTouched: { ...isTouched, [item]: true } });
+    const { error, isTouched, hasError } = this.state;
+    this.setState({
+      [item]: event.target.value,
+      error: { ...error, [item]: '' },
+      isTouched: { ...isTouched, [item]: true },
+      hasError: { ...hasError, [item]: false },
+    });
   };
 
   handleValidation = item => () => {
@@ -53,7 +58,6 @@ class InputDemo extends Component {
       isTouched,
       hasError,
     } = this.state;
-    console.log('value of item---------------------------------- ', item);
 
     schema.validate({ name, sports, sportsValue }, { abortEarly: false })
       .then(this.setState({ isTouched: { ...isTouched, [item]: true } }))
@@ -99,7 +103,6 @@ class InputDemo extends Component {
       sportsValue,
       error,
     } = this.state;
-
     return (
       <>
         <h3>Name</h3>
@@ -125,9 +128,10 @@ class InputDemo extends Component {
         ) : (
           ''
         )}
-        <Button value="Cancel" />
-        {(this.buttonChecked()) ? <Button value="Submit" color={{ backgroundColor: 'green' }} /> : <Button value="Submit" disabled />}
-
+        <div style={{ textAlign: 'right' }}>
+          <Button value="Cancel" />
+          {(this.buttonChecked()) ? <Button value="Submit" color={{ backgroundColor: '#42f448', color: 'white' }} /> : <Button value="Submit" disabled />}
+        </div>
       </>
     );
   }

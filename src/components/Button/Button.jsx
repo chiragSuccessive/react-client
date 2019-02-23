@@ -7,11 +7,12 @@ const Button = (props) => {
     onClick,
     value,
     disabled,
+    color,
     ...rest
   } = props;
   return (
     <>
-      <button type="button" onClick={onClick} disabled={disabled} {...rest} style={{ ...style.base }}>{value}</button>
+      <button type="button" onClick={onClick} disabled={disabled} {...rest} style={{ ...style.base, ...color }}>{value}</button>
     </>
   );
 };
