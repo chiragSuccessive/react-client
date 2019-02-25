@@ -1,6 +1,15 @@
 import React from 'react';
-import { InputDemo } from './pages';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import { Typography } from '@material-ui/core';
+import { ComponentDemo } from './pages';
+import theme from './theme';
 
-const App = () => (<InputDemo />);
+const App = () => (
+  <MuiThemeProvider theme={theme}>
+    <Typography>
+      <ComponentDemo />
+    </Typography>
+  </MuiThemeProvider>
+);
 
 export default App;
