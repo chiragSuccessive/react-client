@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Typography } from '@material-ui/core';
 import Math from '../../components/Math';
 
 class ComponentDemo extends Component {
@@ -10,11 +11,13 @@ class ComponentDemo extends Component {
   render() {
     return (
       <>
-        <Math first={5} second={0} operator="+">
-          {(first, second, operator, result) => (
-            <div>{`${first} ${operator} ${second} = ${result}`}</div>
-          )}
-        </Math>
+        <Typography>
+          <Math first={5} second={0} operator="+">
+            {(first, second, operator, result) => (
+              <div>{`${first} ${operator} ${second} = ${result}`}</div>
+            )}
+          </Math>
+        </Typography>
         <Math first={5} second={0} operator="+">
           {(first, second, operator, result) => (
             <div>{`sum of ${first} and ${second} is ${result}`}</div>
