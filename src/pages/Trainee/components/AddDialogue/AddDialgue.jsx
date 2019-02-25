@@ -7,6 +7,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
+import InputAdornment from '@material-ui/core/InputAdornment';
+
 
 const styles = theme => ({
   container: {
@@ -43,45 +45,65 @@ class AddDialogue extends Component {
         >
           ADD TRAINEE
         </Button>
-        <Grid container xs={12}>
+        <Grid container spacing={48}>
           <Dialog open={open} onClose={this.handleClose}>
             <DialogTitle>Add Trainee</DialogTitle>
             <DialogContent>
               <DialogContentText>Enter your trainee details</DialogContentText>
             </DialogContent>
-            <Grid item xs={10}>
+            <Grid item xs={24}>
               <TextField
                 label="Name"
                 value={name}
                 margin="normal"
                 variant="outlined"
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
             </Grid>
-            <Grid item xs={10}>
+            <Grid item xs={24}>
               <TextField
                 label="Email Address"
                 value={email}
                 margin="normal"
                 variant="outlined"
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
             </Grid>
-            <Grid item xs={10}>
-              <Grid item xs={5}>
+            <Grid container spacing={24}>
+              <Grid item xs={6}>
                 <TextField
                   label="Password"
                   value={password}
                   margin="normal"
                   variant="outlined"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                 />
               </Grid>
-              <Grid item xs={5}>
+              <Grid item xs={6}>
                 <TextField
                   label="Confirm Password"
                   value={confirmPswd}
                   margin="normal"
                   variant="outlined"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                 />
               </Grid>
+              <Button color="secondary">
+                  Cancel
+              </Button>
+              <Button variant="contained" color="primary" disabled>
+                  Submit
+              </Button>
             </Grid>
           </Dialog>
         </Grid>
