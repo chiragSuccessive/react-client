@@ -1,54 +1,176 @@
 import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import { withStyles } from '@material-ui/core/styles';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import Email from '@material-ui/icons/Email';
+import Person from '@material-ui/icons/Person';
+import PropTypes from 'prop-types';
+import Button from '@material-ui/core/Button';
+import * as yup from 'yup';
+import DialogActions from '@material-ui/core/DialogActions';
 
-const styles = theme => ({
-  container: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(12, 1fr)',
-    gridGap: `${theme.spacing.unit * 3}px`,
-  },
+const schema = yup.object().shape({
+  name: yup
+    .string()
+    .min(3)
+    .required()
+    .label('Name'),
+  email: yup
+    .string()
+    .email()
+    .required(),
+  password: yup
+    .string()
+    .required('No password provided.')
+    .min(8, 'Password is too short - should be 8 chars minimum.')
+    .matches(
+      /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*/,
+      'Must contain 8 characters atleast 1 uppercase letter, 1 lowercase and 1 number',
+    ),
+  confirmPswd: yup
+    .string()
+    .oneOf([yup.ref('password'), null], "Passwords don't match")
+    .required('Confirm Password is required'),
 });
 
 class AddDialogue extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      open: false,
       name: '',
       email: '',
       password: '',
       confirmPswd: '',
+      showPassword: false,
+      showMatchPassword: false,
+      error: {
+        name: '',
+        email: '',
+        password: '',
+        confirmPswd: '',
+      },
+      isTouched: {
+        name: false,
+        email: false,
+        password: false,
+        confirmPswd: false,
+      },
+      hasError: {
+        name: false,
+        email: false,
+        password: false,
+        confirmPswd: false,
+      },
     };
   }
 
-  handleClickOpen = () => {
-    this.setState({ open: true });
+  handleClickShowPassword = () => {
+    this.setState(state => ({ showPassword: !state.showPassword }));
   };
 
-  render() {
+  handleClickShowMatchPassword = () => {
+    this.setState(state => ({ showMatchPassword: !state.showMatchPassword }));
+  };
+
+  handleValue = item => (event) => {
+    const { error, isTouched, hasError } = this.state;
+    this.setState({
+      [item]: event.target.value,
+      error: { ...error, [item]: '' },
+      isTouched: { ...isTouched, [item]: true },
+      hasError: { ...hasError, [item]: false },
+    });
+  };
+
+  handleValidation = item => () => {
     const {
-      open, name, email, password, confirmPswd,
+      name,
+      email,
+      password,
+      confirmPswd,
+      error,
+      isTouched,
+      hasError,
+    } = this.state;
+
+    schema
+      .validate(
+        {
+          name,
+          email,
+          password,
+          confirmPswd,
+        },
+        { abortEarly: false },
+      )
+      .then(this.setState({ isTouched: { ...isTouched, [item]: true } }))
+      .catch((err) => {
+        err.inner.forEach((res) => {
+          if (res.path === item) {
+            this.setState({
+              error: { ...error, [item]: res.message },
+              hasError: { ...hasError, [item]: true },
+            });
+          }
+        });
+      });
+  };
+
+  buttonChecked = () => {
+    const { hasError, isTouched } = this.state;
+    let notError = 0;
+    let touched = 0;
+    let result = false;
+    Object.keys(hasError).forEach((i) => {
+      if (hasError[i] === false) {
+        notError += 1;
+      }
+    });
+    Object.keys(isTouched).forEach((i) => {
+      if (isTouched[i] === true) {
+        touched += 1;
+      }
+    });
+    if (notError === 4 && touched === 4) {
+      result = true;
+    } else if (notError !== 4 && touched !== 4) {
+      result = false;
+    }
+    return result;
+  };
+
+  onSubmit = () => {
+    const { onSubmit } = this.props;
+    const {
+      name,
+      email,
+      password,
+    } = this.state;
+
+    onSubmit({ name, email, password });
+  }
+
+  render() {
+    const { open, onClose, onSubmit } = this.props;
+    const {
+      name,
+      email,
+      password,
+      confirmPswd,
+      showPassword,
+      showMatchPassword,
+      error,
+      hasError,
     } = this.state;
     return (
       <>
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={this.handleClickOpen}
-        >
-          ADD TRAINEE
-        </Button>
         <Dialog open={open} onClose={this.handleClose}>
           <DialogTitle>Add Trainee</DialogTitle>
           <DialogContent>
@@ -58,9 +180,20 @@ class AddDialogue extends Component {
               value={name}
               margin="normal"
               variant="outlined"
+              onChange={this.handleValue('name')}
+              onBlur={this.handleValidation('name')}
+              error={hasError.name}
+              helperText={error.name}
               fullWidth
               InputLabelProps={{
                 shrink: true,
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Person />
+                  </InputAdornment>
+                ),
               }}
             />
             <TextField
@@ -68,9 +201,20 @@ class AddDialogue extends Component {
               value={email}
               margin="normal"
               variant="outlined"
+              onChange={this.handleValue('email')}
+              onBlur={this.handleValidation('email')}
+              error={hasError.email}
+              helperText={error.email}
               fullWidth
               InputLabelProps={{
                 shrink: true,
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Email />
+                  </InputAdornment>
+                ),
               }}
             />
             <Grid container spacing={24}>
@@ -78,19 +222,21 @@ class AddDialogue extends Component {
                 <TextField
                   label="Password"
                   value={password}
+                  type={showPassword ? 'text' : 'password'}
                   margin="normal"
                   variant="outlined"
+                  onChange={this.handleValue('password')}
+                  onBlur={this.handleValidation('password')}
+                  error={hasError.password}
+                  helperText={error.password}
                   InputLabelProps={{
                     shrink: true,
                   }}
                   InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="Toggle password visibility"
-                          onClick={this.handleClickShowPassword}
-                        >
-                          {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IconButton onClick={this.handleClickShowPassword}>
+                          {showPassword ? <Visibility /> : <VisibilityOff /> }
                         </IconButton>
                       </InputAdornment>
                     ),
@@ -101,24 +247,71 @@ class AddDialogue extends Component {
                 <TextField
                   label="Confirm Password"
                   value={confirmPswd}
+                  type={showMatchPassword ? 'text' : 'password'}
                   margin="normal"
                   variant="outlined"
+                  onChange={this.handleValue('confirmPswd')}
+                  onBlur={this.handleValidation('confirmPswd')}
+                  error={hasError.confirmPswd}
+                  helperText={error.confirmPswd}
                   InputLabelProps={{
                     shrink: true,
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IconButton onClick={this.handleClickShowMatchPassword}>
+                          {showMatchPassword ? (
+                            <VisibilityOff />
+                          ) : (
+                            <Visibility />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
                   }}
                 />
               </Grid>
             </Grid>
-            <Button color="secondary">
-                  Cancel
-            </Button>
-            <Button variant="contained" color="primary" disabled>
-                  Submit
-            </Button>
           </DialogContent>
+          <DialogActions>
+            <Button color="primary" onClick={onClose}>
+              Cancel
+            </Button>
+            {this.buttonChecked() ? (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={this.onSubmit}
+              >
+                Submit
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={this.onSubmit}
+                disabled
+              >
+                Submit
+              </Button>
+            )}
+
+          </DialogActions>
         </Dialog>
       </>
     );
   }
 }
-export default withStyles(styles)(AddDialogue);
+
+AddDialogue.propTypes = {
+  open: PropTypes.bool,
+  onClose: PropTypes.func,
+  onSubmit: PropTypes.func,
+};
+AddDialogue.defaultProps = {
+  open: false,
+  onClose: () => {},
+  onSubmit: () => {},
+};
+export default AddDialogue;
