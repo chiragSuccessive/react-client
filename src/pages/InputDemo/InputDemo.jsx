@@ -6,7 +6,7 @@ class InputDemo extends Component {
   constructor() {
     super();
     this.state = {
-      value: 'name',
+      value: '',
       sports: '',
       cricket: '',
       football: '',
