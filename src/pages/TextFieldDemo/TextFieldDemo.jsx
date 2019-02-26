@@ -2,8 +2,6 @@ import React from 'react';
 import TextField from '../../components';
 
 const Demo = () => {
-  console.log('running');
-
   return (
     <>
       <h3>This is a Disabled Input</h3>

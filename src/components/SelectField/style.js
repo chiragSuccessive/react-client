@@ -6,11 +6,5 @@ const style = {
     border: '1px solid lightGray',
     margin: '10px',
   },
-  errorColor: {
-    color: 'red',
-  },
-  errorBorder: {
-    border: '1px solid red',
-  },
 };
 export default style;
