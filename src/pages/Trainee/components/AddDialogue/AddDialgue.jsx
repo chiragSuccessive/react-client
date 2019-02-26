@@ -8,7 +8,9 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import InputAdornment from '@material-ui/core/InputAdornment';
-
+import IconButton from '@material-ui/core/IconButton';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 const styles = theme => ({
   container: {
@@ -35,7 +37,9 @@ class AddDialogue extends Component {
   };
 
   render() {
-    const { open, name, email, password, confirmPswd } = this.state;
+    const {
+      open, name, email, password, confirmPswd,
+    } = this.state;
     return (
       <>
         <Button
@@ -45,38 +49,32 @@ class AddDialogue extends Component {
         >
           ADD TRAINEE
         </Button>
-        <Grid container spacing={48}>
-          <Dialog open={open} onClose={this.handleClose}>
-            <DialogTitle>Add Trainee</DialogTitle>
-            <DialogContent>
-              <DialogContentText>Enter your trainee details</DialogContentText>
-            </DialogContent>
-            <Grid item xs={24}>
-              <TextField
-                label="Name"
-                value={name}
-                margin="normal"
-                variant="outlined"
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </Grid>
-            <Grid item xs={24}>
-              <TextField
-                label="Email Address"
-                value={email}
-                margin="normal"
-                variant="outlined"
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </Grid>
+        <Dialog open={open} onClose={this.handleClose}>
+          <DialogTitle>Add Trainee</DialogTitle>
+          <DialogContent>
+            <DialogContentText>Enter your trainee details</DialogContentText>
+            <TextField
+              label="Name"
+              value={name}
+              margin="normal"
+              variant="outlined"
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+            <TextField
+              label="Email Address"
+              value={email}
+              margin="normal"
+              variant="outlined"
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
             <Grid container spacing={24}>
-              <Grid item xs={6}>
+              <Grid item xl={6} xs={6}>
                 <TextField
                   label="Password"
                   value={password}
@@ -85,9 +83,21 @@ class AddDialogue extends Component {
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="Toggle password visibility"
+                          onClick={this.handleClickShowPassword}
+                        >
+                          {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xl={6} xs={6}>
                 <TextField
                   label="Confirm Password"
                   value={confirmPswd}
@@ -98,15 +108,15 @@ class AddDialogue extends Component {
                   }}
                 />
               </Grid>
-              <Button color="secondary">
-                  Cancel
-              </Button>
-              <Button variant="contained" color="primary" disabled>
-                  Submit
-              </Button>
             </Grid>
-          </Dialog>
-        </Grid>
+            <Button color="secondary">
+                  Cancel
+            </Button>
+            <Button variant="contained" color="primary" disabled>
+                  Submit
+            </Button>
+          </DialogContent>
+        </Dialog>
       </>
     );
   }
