@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 
 const calculate = (first, second, operator) => {
@@ -27,6 +28,9 @@ const Math = (props) => {
     children,
   } = props;
   const result = calculate(first, second, operator);
+  if (children) {
+    return <div>{`${first} ${operator} ${second} = ${result}`}</div>;
+  }
   return children(first, second, operator, result);
 };
 
@@ -35,6 +39,10 @@ Math.propTypes = {
   second: PropTypes.number.isRequired,
   operator: PropTypes.string.isRequired,
   children: PropTypes.func,
+};
+
+Math.defaultProps = {
+  children: () => (false),
 };
 
 
