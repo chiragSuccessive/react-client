@@ -41,6 +41,9 @@ const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
+  textfield: {
+    marginTop: theme.spacing.unit * 3,
+  }
 });
 
 const schema = yup.object().shape({
