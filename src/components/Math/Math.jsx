@@ -29,9 +29,9 @@ const Math = (props) => {
   } = props;
   const result = calculate(first, second, operator);
   if (children) {
-    return <div>{`${first} ${operator} ${second} = ${result}`}</div>;
+    return children(first, second, operator, result);
   }
-  return children(first, second, operator, result);
+  return <div>{`${first} ${operator} ${second} = ${result}`}</div>;
 };
 
 Math.propTypes = {
@@ -42,7 +42,7 @@ Math.propTypes = {
 };
 
 Math.defaultProps = {
-  children: () => (false),
+  children: null,
 };
 
 

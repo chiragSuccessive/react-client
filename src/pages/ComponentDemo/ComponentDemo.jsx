@@ -22,7 +22,7 @@ const ComponentDemo = () => (
         <div>{`when we multiply ${first} with ${second} then we get ${result} as a result`}</div>
       )}
     </Math>
-    <Math first={5} second={0} operator="/" />
+    <Math first={5} second={5} operator="/" />
   </>
 );
 export default ComponentDemo;
