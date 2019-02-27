@@ -7,15 +7,17 @@ const SelectField = (props) => {
     options,
     defaultText,
     value,
+    error,
     ...rest
   } = props;
-  const { base } = style;
+  const errorBorder = error ? style.errorBorder : {};
   return (
     <div>
-      <select {...rest} style={base}>
+      <select {...rest} style={{ ...style.base, ...errorBorder }}>
         <option value="blank">{defaultText}</option>
         { options.map(val => <option value={val.value} {...rest}>{val.label}</option>)}
       </select>
+      {error ? <p style={style.errorColor}>{error}</p> : ''}
     </div>
   );
 };

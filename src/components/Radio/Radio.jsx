@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import style from './style';
 
 const Radio = (props) => {
   const {
     value,
     options,
     onChange,
+    error,
     ...rest
   } = props;
 
@@ -18,6 +19,7 @@ const Radio = (props) => {
           {val.label}
         </div>
       ))}
+      {error ? <p style={style.errorColor}>{error}</p> : ''}
     </>
   );
 };
