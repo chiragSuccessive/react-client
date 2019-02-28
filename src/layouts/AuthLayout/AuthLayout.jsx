@@ -1,9 +1,19 @@
-// import React from 'react';
-// import { BrowserRouter as Router, Route, Link, Match, Redirect, Switch } from 'react-router-dom'
+import React from 'react';
+import PropTypes from 'prop-types';
+import Footer from '../components/Footer';
 
-// const AuthLayout = ({children, ...rest}) => (
-//   <div>
-//     {children}
-//   </div>
-// );
-// export default AuthLayout;
+const AuthLayout = ({ children, ...rest }) => {
+  console.log('--------6--------');
+
+  return (
+  <div>
+    {children}
+    <Footer />
+  </div>
+);
+  }
+AuthLayout.propTypes = {
+  // children: PropTypes.objectOf(PropTypes.object).isRequired,
+};
+
+export default AuthLayout;
