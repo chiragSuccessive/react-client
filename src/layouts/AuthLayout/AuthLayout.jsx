@@ -6,12 +6,12 @@ const AuthLayout = ({ children, ...rest }) => {
   console.log('--------6--------');
 
   return (
-  <div>
-    {children}
-    <Footer />
-  </div>
-);
-  }
+    <div>
+      {children}
+      <Footer />
+    </div>
+  );
+};
 AuthLayout.propTypes = {
   // children: PropTypes.objectOf(PropTypes.object).isRequired,
 };
