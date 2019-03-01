@@ -34,6 +34,10 @@ const styles = () => ({
   },
 });
 
+const getDateFormatted = createdAt => (
+  moment(createdAt).format('dddd, MMMM Do YYYY, h:mm:ss a')
+);
+
 const check = (res, classes) => (
   <div>
     <Card className={classes.card}>
@@ -48,7 +52,7 @@ const check = (res, classes) => (
             {res.name}
           </Typography>
           <Typography variant="subtitle1" color="textSecondary">
-            {moment().format('dddd, MMMM Do YYYY, h:mm:ss a')}
+            { getDateFormatted(res.createdAt)}
           </Typography>
           <Typography variant="subtitle1" paragraph>
             {res.email}
