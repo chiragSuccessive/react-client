@@ -29,9 +29,8 @@ const schema = yup.object().shape({
   password: yup
     .string()
     .required('No password provided.')
-    .min(8, 'Password is too short - should be 8 chars minimum.')
     .matches(
-      /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*/,
+      /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8}/,
       'Must contain 8 characters atleast 1 uppercase letter, 1 lowercase and 1 number',
     ),
   confirmPswd: yup
@@ -62,12 +61,6 @@ class AddDialogue extends Component {
         password: false,
         confirmPswd: false,
       },
-      hasError: {
-        name: false,
-        email: false,
-        password: false,
-        confirmPswd: false,
-      },
     };
   }
 
@@ -80,13 +73,12 @@ class AddDialogue extends Component {
   };
 
   handleValue = item => (event) => {
-    const { error, isTouched, hasError } = this.state;
+    const { error, isTouched } = this.state;
     this.setState({
       [item]: event.target.value,
       error: { ...error, [item]: '' },
       isTouched: { ...isTouched, [item]: true },
-      hasError: { ...hasError, [item]: false },
-    });
+    }, this.handleValidation(item));
   };
 
   handleValidation = item => () => {
@@ -97,7 +89,6 @@ class AddDialogue extends Component {
       confirmPswd,
       error,
       isTouched,
-      hasError,
     } = this.state;
 
     schema
@@ -110,13 +101,13 @@ class AddDialogue extends Component {
         },
         { abortEarly: false },
       )
-      .then(this.setState({ isTouched: { ...isTouched, [item]: true } }))
+      .then(this.setState({ isTouched: { ...isTouched, [item]: true, error: { ...error, [item]: '' } } }))
       .catch((err) => {
         err.inner.forEach((res) => {
           if (res.path === item) {
             this.setState({
               error: { ...error, [item]: res.message },
-              hasError: { ...hasError, [item]: true },
+              isTouched: { ...isTouched, [item]: true },
             });
           }
         });
@@ -124,12 +115,12 @@ class AddDialogue extends Component {
   };
 
   buttonChecked = () => {
-    const { hasError, isTouched } = this.state;
+    const { error, isTouched } = this.state;
     let notError = 0;
     let touched = 0;
     let result = false;
-    Object.keys(hasError).forEach((i) => {
-      if (hasError[i] === false) {
+    Object.keys(error).forEach((i) => {
+      if (error[i] === '') {
         notError += 1;
       }
     });
@@ -167,7 +158,6 @@ class AddDialogue extends Component {
       showPassword,
       showMatchPassword,
       error,
-      hasError,
     } = this.state;
     return (
       <>
@@ -176,14 +166,14 @@ class AddDialogue extends Component {
           <DialogContent>
             <DialogContentText>Enter your trainee details</DialogContentText>
             <TextField
-              label="Name"
+              label="Name *"
               value={name}
               margin="normal"
               variant="outlined"
               onChange={this.handleValue('name')}
               onBlur={this.handleValidation('name')}
-              error={hasError.name}
               helperText={error.name}
+              error={error.name}
               fullWidth
               InputLabelProps={{
                 shrink: true,
@@ -203,8 +193,8 @@ class AddDialogue extends Component {
               variant="outlined"
               onChange={this.handleValue('email')}
               onBlur={this.handleValidation('email')}
-              error={hasError.email}
               helperText={error.email}
+              error={error.email}
               fullWidth
               InputLabelProps={{
                 shrink: true,
@@ -227,8 +217,8 @@ class AddDialogue extends Component {
                   variant="outlined"
                   onChange={this.handleValue('password')}
                   onBlur={this.handleValidation('password')}
-                  error={hasError.password}
                   helperText={error.password}
+                  error={error.password}
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -252,8 +242,8 @@ class AddDialogue extends Component {
                   variant="outlined"
                   onChange={this.handleValue('confirmPswd')}
                   onBlur={this.handleValidation('confirmPswd')}
-                  error={hasError.confirmPswd}
                   helperText={error.confirmPswd}
+                  error={error.confirmPswd}
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -262,9 +252,9 @@ class AddDialogue extends Component {
                       <InputAdornment position="start">
                         <IconButton onClick={this.handleClickShowMatchPassword}>
                           {showMatchPassword ? (
-                            <VisibilityOff />
-                          ) : (
                             <Visibility />
+                          ) : (
+                            <VisibilityOff />
                           )}
                         </IconButton>
                       </InputAdornment>
@@ -278,25 +268,14 @@ class AddDialogue extends Component {
             <Button color="primary" onClick={onClose}>
               Cancel
             </Button>
-            {this.buttonChecked() ? (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={this.onSubmit}
-              >
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={this.onSubmit}
+              disabled={!(this.buttonChecked())}
+            >
                 Submit
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={this.onSubmit}
-                disabled
-              >
-                Submit
-              </Button>
-            )}
-
+            </Button>
           </DialogActions>
         </Dialog>
       </>
