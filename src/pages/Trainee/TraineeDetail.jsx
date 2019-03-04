@@ -5,12 +5,12 @@ import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import moment from 'moment';
 import { Button } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import NoMatch from '../NoMatch';
 import trainee from './data/trainee';
+import getDateFormatted from '../../libs/utils/moment';
 
 const styles = () => ({
   card: {
@@ -33,10 +33,6 @@ const styles = () => ({
     marginTop: '2%',
   },
 });
-
-const getDateFormatted = createdAt => (
-  moment(createdAt).format('dddd, MMMM Do YYYY, h:mm:ss a')
-);
 
 const check = (res, classes) => (
   <div>
