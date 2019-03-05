@@ -78,10 +78,11 @@ class AddDialogue extends Component {
       [item]: event.target.value,
       error: { ...error, [item]: '' },
       isTouched: { ...isTouched, [item]: true },
-    }, this.handleValidation(item));
+    }, () => this.handleValidation(item));
   };
 
   handleValidation = item => () => {
+    console.log('------------6-----------------', item);
     const {
       name,
       email,
