@@ -60,11 +60,6 @@ class TraineeList extends Component {
         format: getDateFormatted,
       },
     ];
-    const temp = trainee.map(res => (
-      <li>
-        <Link to={`/trainee/${res.id}`}>{res.name}</Link>
-      </li>
-    ));
 
     const { order, active } = this.state;
 
@@ -80,9 +75,6 @@ class TraineeList extends Component {
           </Button>
         </div>
         <GenericTable data={trainee} columns={columns} onSelect={this.onSelect} order={order} onSort={this.handleOnSort} active={active} />
-        <ul>
-          {temp}
-        </ul>
       </>
     );
   }

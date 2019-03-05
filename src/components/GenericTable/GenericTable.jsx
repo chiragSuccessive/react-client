@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -26,69 +26,64 @@ const styles = theme => ({
   },
 });
 
+const GenericTable = (props) => {
+  const {
+    classes,
+    data,
+    columns,
+    id,
+    orderBy,
+    order,
+    onSort,
+    onSelect,
+    active,
+  } = props;
 
-class GenericTable extends Component {
-  createSortHandler = (event, label) => {
+  const createSortHandler = (event, label) => {
     event.preventDefault();
-    const { onSort } = this.props;
     onSort(label);
   };
 
-  render() {
-    const {
-      classes,
-      data,
-      columns,
-      id,
-      orderBy,
-      order,
-      onSort,
-      onSelect,
-      active
-    } = this.props;
-
-
-    return (
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              {columns.map(row => (
-                <TableCell align={row.align}>
-                  <TableSortLabel
-                    active={active===row.label}
-                    direction={order}
-                    onClick={event => this.createSortHandler(event, row.label)}
-                  >
-                    {row.label ? row.label : row.field}
-                  </TableSortLabel>
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map(row => (
-              <TableRow
-                className={classes.row}
-                hover
-                onClick={event => onSelect(event, row.id)}
-              >
-                {columns.map((column) => {
-                  let value = row[column.field];
-                  const temp = column.format;
-                  if (column.format) {
-                    value = temp(value);
-                  }
-                  return <TableCell align={column.align}>{value}</TableCell>;
-                })}
-              </TableRow>
+  return (
+    <Paper className={classes.root}>
+      <Table className={classes.table}>
+        <TableHead>
+          <TableRow>
+            {columns.map(row => (
+              <TableCell align={row.align}>
+                <TableSortLabel
+                  active={active === row.label}
+                  direction={order}
+                  onClick={event => createSortHandler(event, row.label)}
+                >
+                  {row.label ? row.label : row.field}
+                </TableSortLabel>
+              </TableCell>
             ))}
-          </TableBody>
-        </Table>
-      </Paper>
-    );
-  }
-}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.map(row => (
+            <TableRow
+              className={classes.row}
+              hover
+              onClick={event => onSelect(event, row.id)}
+            >
+              {columns.map((column) => {
+                let value = row[column.field];
+                const temp = column.format;
+                if (column.format) {
+                  value = temp(value);
+                }
+                return <TableCell align={column.align}>{value}</TableCell>;
+              })}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </Paper>
+  );
+};
 
 GenericTable.propTypes = {
   classes: PropTypes.objectOf.isRequired,
