@@ -73,12 +73,19 @@ class AddDialogue extends Component {
   };
 
   handleValue = item => (event) => {
+    console.log('---------76-----------');
+
     const { error, isTouched } = this.state;
+    const that = this;
     this.setState({
       [item]: event.target.value,
       error: { ...error, [item]: '' },
       isTouched: { ...isTouched, [item]: true },
-    }, () => this.handleValidation(item));
+    }, () => {
+      console.log('---------82-------', this, item);
+
+      this.handleValidation(item);
+    });
   };
 
   handleValidation = item => () => {
