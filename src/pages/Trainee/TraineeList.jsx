@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { GenericTable, DeleteDialog, EditDialog } from '../../components';
 import trainee from './data/trainee';
-import { GenericTable } from '../../components';
-import getDateFormatted from '../../libs/utils/moment';
-
 
 class TraineeList extends Component {
   constructor() {
@@ -13,6 +12,9 @@ class TraineeList extends Component {
       open: false,
       order: 'asc',
       active: '',
+      deleteOpen: false,
+      editOpen: false,
+      traineeData: '',
     };
   }
 
@@ -24,24 +26,43 @@ class TraineeList extends Component {
     this.setState({ open: false });
   };
 
+  handleDeleteClose = () => {
+    this.setState({ deleteOpen: false });
+  }
+
+  handleEditClose = () => {
+    this.setState({ editOpen: false });
+  }
+
   handleSubmit = (temp) => {
     this.setState({ open: false });
     console.log(temp);
-  }
+  };
 
-  onSelect = (event, id) => {
+  handleSelect = (event, id) => {
     const { history } = this.props;
     event.preventDefault();
     history.push(`/trainee/${id}`);
-  }
+  };
 
   handleOnSort = (field) => {
     const { order } = this.state;
-    this.setState({ order: (order) === 'asc' ? 'desc' : 'asc', active: field });
+    this.setState({ order: order === 'asc' ? 'desc' : 'asc', active: field });
+  };
+
+  handlerEditDialogOpen = (event, data) => {
+    event.preventDefault();
+    this.setState({ editOpen: true, traineeData: data });
   }
 
+  handleRemoveDialogOpen = (event, data) => {
+    console.log('---------------------------------4-----------------');
+    event.preventDefault();
+    this.setState({ deleteOpen: true, traineeData: data });
+  };
+
   render() {
-    const { open } = this.state;
+    const { open, traineeData } = this.state;
     const columns = [
       {
         field: 'name',
@@ -57,12 +78,22 @@ class TraineeList extends Component {
         field: 'createdAt',
         label: 'Date',
         align: 'center',
-        format: getDateFormatted,
+        // format: getDateFormatted,
       },
     ];
 
-    const { order, active } = this.state;
+    const actions = [
+      {
+        icon: <EditIcon />,
+        handler: this.handlerEditDialogOpen,
+      },
+      {
+        icon: <DeleteIcon />,
+        handler: this.handleRemoveDialogOpen,
+      },
+    ];
 
+    const { order, active, deleteOpen, editOpen } = this.state;
     return (
       <>
         <div align="right">
@@ -71,10 +102,23 @@ class TraineeList extends Component {
             color="primary"
             onClick={this.handleClickOpen}
           >
-          ADD TRAINEELIST
+            ADD TRAINEELIST
           </Button>
         </div>
-        <GenericTable data={trainee} columns={columns} onSelect={this.onSelect} order={order} onSort={this.handleOnSort} active={active} />
+        <GenericTable
+          data={trainee}
+          columns={columns}
+          onSelect={this.handleSelect}
+          order={order}
+          onSort={this.handleOnSort}
+          active={active}
+          actions={actions}
+          rowsPerPage={100}
+          page={0}
+        />
+        <DeleteDialog />
+        <DeleteDialog deleteOpen={deleteOpen} onClose={this.handleDeleteClose} detail={traineeData} />
+        <EditDialog editOpen={editOpen} onClose={this.handleEditClose} detail={traineeData} />
       </>
     );
   }

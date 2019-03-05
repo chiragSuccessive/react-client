@@ -8,6 +8,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
+import TablePagination from '@material-ui/core/TablePagination';
+import IconButton from '@material-ui/core/IconButton';
 
 const styles = theme => ({
   root: {
@@ -37,6 +39,9 @@ const GenericTable = (props) => {
     onSort,
     onSelect,
     active,
+    actions,
+    rowsPerPage,
+    page,
   } = props;
 
   const createSortHandler = (event, label) => {
@@ -66,8 +71,6 @@ const GenericTable = (props) => {
           {data.map(row => (
             <TableRow
               className={classes.row}
-              hover
-              onClick={event => onSelect(event, row.id)}
             >
               {columns.map((column) => {
                 let value = row[column.field];
@@ -75,12 +78,34 @@ const GenericTable = (props) => {
                 if (column.format) {
                   value = temp(value);
                 }
-                return <TableCell align={column.align}>{value}</TableCell>;
+                return <TableCell align={column.align} hover onClick={event => onSelect(event, row.id)}>{value}</TableCell>;
               })}
+              <TableCell>
+                {
+                  actions.map((action) => {
+                    // console.log('-------------------', action.handler);
+                    return <IconButton onClick={event => action.handler(event, row)}>{action.icon}</IconButton>;
+                  })
+                }
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      <TablePagination
+        component="div"
+        count={data.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        backIconButtonProps={{
+          'aria-label': 'Previous Page',
+        }}
+        nextIconButtonProps={{
+          'aria-label': 'Next Page',
+        }}
+        // onChangePage={this.handleChangePage}
+        // onChangeRowsPerPage={this.handleChangeRowsPerPage}
+      />
     </Paper>
   );
 };
