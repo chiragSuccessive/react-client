@@ -16,18 +16,19 @@ class DeleteDialog extends Component {
   }
 
   handleDeleteClose = () => {
-    console.log('--------------------------------------');
-
-    this.setState({ open: false });
+    const { details, onClose } = this.props;
+    console.log('Deleted Item', details);
+    onClose();
   };
 
 
   render() {
-    const { deleteOpen } = this.props;
+    const { deleteOpen, onClose } = this.props;
     const { open } = this.state;
     return (
       <Dialog
         open={deleteOpen}
+        onClose={onClose}
       >
         <DialogTitle>Remove Trainee</DialogTitle>
         <DialogContent>
@@ -36,11 +37,11 @@ class DeleteDialog extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleDeleteClose} color="primary">
-            Delete
-          </Button>
-          <Button onClick={this.handleDeleteClose} color="primary" autoFocus>
+          <Button onClick={onClose} color="primary">
             Cancel
+          </Button>
+          <Button onClick={this.handleDeleteClose} color="primary" variant="contained">
+            Delete
           </Button>
         </DialogActions>
       </Dialog>

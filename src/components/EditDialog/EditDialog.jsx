@@ -14,27 +14,28 @@ class EditDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      email: '',
-      open: false,
+      buttonEnable: false,
     };
   }
 
   handleValue = item => (event) => {
+    const { details } = this.props;
+    details[item] = event.target.value;
     this.setState({
-      [item]: event.target.value,
+      buttonEnable: true,
     });
   };
 
   onSubmit = () => {
-    const { details } = this.props;
-    console.log(details);
-    this.setState({ open: false });
+    const { details, onClose } = this.props;
+    const obj = { name: details.name, email: details.email };
+    console.log('Editted Item', obj);
+    onClose();
   }
 
   render() {
-    const { name, email, open } = this.state;
-    const { editOpen, onClose } = this.props;
+    const { editOpen, onClose, details } = this.props;
+    const { buttonEnable } = this.state;
     return (
       <Dialog open={editOpen} onClose={this.handleClose}>
         <DialogTitle>Add Trainee</DialogTitle>
@@ -42,7 +43,7 @@ class EditDialog extends Component {
           <DialogContentText>Enter your trainee details</DialogContentText>
           <TextField
             label="Name"
-            value={name}
+            defaultValue={details.name}
             margin="normal"
             variant="outlined"
             onChange={this.handleValue('name')}
@@ -60,11 +61,10 @@ class EditDialog extends Component {
           />
           <TextField
             label="Email Address"
-            value={email}
+            defaultValue={details.email}
             margin="normal"
             variant="outlined"
             onChange={this.handleValue('email')}
-            // onBlur={this.handleValidation('email')}
             fullWidth
             InputLabelProps={{
               shrink: true,
@@ -86,7 +86,7 @@ class EditDialog extends Component {
             variant="contained"
             color="primary"
             onClick={this.onSubmit}
-            disabled={false}
+            disabled={!buttonEnable}
           >
                 Submit
           </Button>

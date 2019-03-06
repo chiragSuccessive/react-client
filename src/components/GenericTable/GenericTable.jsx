@@ -28,6 +28,8 @@ const styles = theme => ({
   },
 });
 
+
+
 const GenericTable = (props) => {
   const {
     classes,
@@ -42,6 +44,8 @@ const GenericTable = (props) => {
     actions,
     rowsPerPage,
     page,
+    count,
+    onChangePage,
   } = props;
 
   const createSortHandler = (event, label) => {
@@ -83,7 +87,6 @@ const GenericTable = (props) => {
               <TableCell>
                 {
                   actions.map((action) => {
-                    // console.log('-------------------', action.handler);
                     return <IconButton onClick={event => action.handler(event, row)}>{action.icon}</IconButton>;
                   })
                 }
@@ -92,20 +95,26 @@ const GenericTable = (props) => {
           ))}
         </TableBody>
       </Table>
-      <TablePagination
-        component="div"
-        count={data.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        backIconButtonProps={{
-          'aria-label': 'Previous Page',
-        }}
-        nextIconButtonProps={{
-          'aria-label': 'Next Page',
-        }}
-        // onChangePage={this.handleChangePage}
-        // onChangeRowsPerPage={this.handleChangeRowsPerPage}
-      />
+      {
+        count
+          ? (
+            <TablePagination
+              rowsPerPageOptions={[]}
+              component="div"
+              count={count}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              backIconButtonProps={{
+                'aria-label': 'Previous Page',
+              }}
+              nextIconButtonProps={{
+                'aria-label': 'Next Page',
+              }}
+              onChangePage={onChangePage}
+            />
+          )
+          : ''
+      }
     </Paper>
   );
 };

@@ -15,6 +15,7 @@ class TraineeList extends Component {
       deleteOpen: false,
       editOpen: false,
       traineeData: '',
+      page: 0,
     };
   }
 
@@ -56,13 +57,17 @@ class TraineeList extends Component {
   }
 
   handleRemoveDialogOpen = (event, data) => {
-    console.log('---------------------------------4-----------------');
     event.preventDefault();
     this.setState({ deleteOpen: true, traineeData: data });
   };
 
+  handleChangePage = (event, page) => {
+    this.setState({ page });
+  }
+
   render() {
     const { open, traineeData } = this.state;
+
     const columns = [
       {
         field: 'name',
@@ -73,12 +78,6 @@ class TraineeList extends Component {
         field: 'email',
         label: 'Email Address',
         format: value => value && value.toUpperCase(),
-      },
-      {
-        field: 'createdAt',
-        label: 'Date',
-        align: 'center',
-        // format: getDateFormatted,
       },
     ];
 
@@ -93,7 +92,7 @@ class TraineeList extends Component {
       },
     ];
 
-    const { order, active, deleteOpen, editOpen } = this.state;
+    const { order, active, deleteOpen, editOpen, page } = this.state;
     return (
       <>
         <div align="right">
@@ -113,12 +112,14 @@ class TraineeList extends Component {
           onSort={this.handleOnSort}
           active={active}
           actions={actions}
-          rowsPerPage={100}
-          page={0}
+          count={100}
+          rowsPerPage={5}
+          page={page}
+          onChangePage={this.handleChangePage}
         />
-        <DeleteDialog />
-        <DeleteDialog deleteOpen={deleteOpen} onClose={this.handleDeleteClose} detail={traineeData} />
-        <EditDialog editOpen={editOpen} onClose={this.handleEditClose} detail={traineeData} />
+        <DeleteDialog deleteOpen={deleteOpen} onClose={this.handleDeleteClose} details={traineeData} />
+        <EditDialog editOpen={editOpen} onClose={this.handleEditClose} details={traineeData}
+        />
       </>
     );
   }
