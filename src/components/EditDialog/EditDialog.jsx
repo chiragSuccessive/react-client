@@ -27,12 +27,12 @@ class EditDialog extends Component {
     });
   };
 
-  onSubmit = () => {
+  onSubmit = (open, message, status) => {
     const { details, onClose } = this.props;
     const obj = { name: details.name, email: details.email };
     console.log('Editted Item', obj);
     onClose();
-    return { open: false };
+    return { open: true, message: 'success', status: 'success' };
   }
 
   render() {
@@ -85,19 +85,14 @@ class EditDialog extends Component {
             <Button color="primary" onClick={onClose}>
               Cancel
             </Button>
-            <SnackBarContext.Consumer>
-              {
-                ({ open }) => (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={this.onSubmit}
-                    disabled={!buttonEnable}
-                  >
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={this.onSubmit}
+              disabled={!buttonEnable}
+            >
                 Submit
-                  </Button>
-                )}
-            </SnackBarContext.Consumer>
+            </Button>
           </DialogActions>
         </Dialog>
       </>
