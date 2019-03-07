@@ -4,6 +4,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { GenericTable, DeleteDialog, EditDialog } from '../../components';
 import trainee from './data/trainee';
+import AddDialogue from './components/AddDialogue';
+import SnackbarContext from '../../contexts/contexts';
 
 class TraineeList extends Component {
   constructor() {
@@ -35,9 +37,10 @@ class TraineeList extends Component {
     this.setState({ editOpen: false });
   }
 
-  handleSubmit = (temp) => {
+  handleSubmit = (details, value) => {
     this.setState({ open: false });
-    console.log(temp);
+    console.log(details);
+    value('successfully added', 'success');
   };
 
   handleSelect = (event, id) => {
@@ -81,6 +84,7 @@ class TraineeList extends Component {
       },
     ];
 
+
     const actions = [
       {
         icon: <EditIcon />,
@@ -92,7 +96,9 @@ class TraineeList extends Component {
       },
     ];
 
-    const { order, active, deleteOpen, editOpen, page } = this.state;
+    const {
+      order, active, deleteOpen, editOpen, page,
+    } = this.state;
     return (
       <>
         <div align="right">
@@ -103,6 +109,18 @@ class TraineeList extends Component {
           >
             ADD TRAINEELIST
           </Button>
+          <SnackbarContext.Consumer>
+            {
+              value => (
+                <AddDialogue
+                  open={open}
+                  onClose={this.handleClose}
+                  onSubmit={(details) => this.handleSubmit(details, value)}
+                />
+              )
+            }
+          </SnackbarContext.Consumer>
+
         </div>
         <GenericTable
           data={trainee}
@@ -118,7 +136,10 @@ class TraineeList extends Component {
           onChangePage={this.handleChangePage}
         />
         <DeleteDialog deleteOpen={deleteOpen} onClose={this.handleDeleteClose} details={traineeData} />
-        <EditDialog editOpen={editOpen} onClose={this.handleEditClose} details={traineeData}
+        <EditDialog
+          editOpen={editOpen}
+          onClose={this.handleEditClose}
+          details={traineeData}
         />
       </>
     );

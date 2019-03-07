@@ -1,7 +1,6 @@
 import React, { Children } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import Button from '@material-ui/core/Button';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import InfoIcon from '@material-ui/icons/Info';
@@ -52,7 +51,8 @@ function MySnackbarContent(props) {
   const {
     classes, className, message, onClose, variant, ...other
   } = props;
-  const Icon = variantIcon[variant];
+  const temp = variant;
+  const Icon = variantIcon[temp];
 
   return (
     <SnackbarContent
@@ -100,6 +100,8 @@ const styles2 = theme => ({
 class CustomizedSnackbars extends React.Component {
   state = {
     open: false,
+    message: '',
+    status: '',
   };
 
   handleOpen = () => {
@@ -114,15 +116,23 @@ class CustomizedSnackbars extends React.Component {
     this.setState({ open: false });
   };
 
+  handleSnackBarOpen = (message, status) => {
+
+    this.setState(
+      {
+        open: true,
+        message,
+        status,
+      },
+    );
+  }
+
   render() {
-    const { classes, children, open } = this.props;
+    const { classes, children } = this.props;
+    const { message, status, open } = this.state;
 
     return (
-      <SnackbarContext.Provider value={
-        { open: this.handleOpen }
-      }
-      >
-        {children}
+      <SnackbarContext.Provider value={this.handleSnackBarOpen}>
         <Snackbar
           anchorOrigin={{
             vertical: 'bottom',
@@ -133,11 +143,11 @@ class CustomizedSnackbars extends React.Component {
           onClose={this.handleClose}
         >
           <MySnackbarContentWrapper
-            onClose={this.handleClose}
-            variant="success"
-            message="This is a success message!"
+            variant={status}
+            message={message}
           />
         </Snackbar>
+        {children}
       </SnackbarContext.Provider>
 
     );
