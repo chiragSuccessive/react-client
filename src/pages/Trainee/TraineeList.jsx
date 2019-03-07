@@ -6,6 +6,7 @@ import { GenericTable, DeleteDialog, EditDialog } from '../../components';
 import trainee from './data/trainee';
 import AddDialogue from './components/AddDialogue';
 import SnackbarContext from '../../contexts/contexts';
+import getDateFormatted from '../../libs/utils/moment';
 
 class TraineeList extends Component {
   constructor() {
@@ -81,6 +82,12 @@ class TraineeList extends Component {
         field: 'email',
         label: 'Email Address',
         format: value => value && value.toUpperCase(),
+      },
+      {
+        field: 'createdAt',
+        label: 'Date',
+        align: 'center',
+        formate: getDateFormatted,
       },
     ];
 
