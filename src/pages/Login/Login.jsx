@@ -14,6 +14,9 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
 import * as yup from 'yup';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import callApi from '../../libs/utils/api';
+import SnackBarContext from '../../contexts/contexts';
 
 const styles = theme => ({
   main: {
@@ -44,6 +47,9 @@ const styles = theme => ({
   textfield: {
     marginTop: theme.spacing.unit * 3,
   },
+  progress: {
+    margin: theme.spacing.unit * 2,
+  },
 });
 
 const schema = yup.object().shape({
@@ -73,6 +79,8 @@ class Login extends Component {
         email: false,
         password: false,
       },
+      disableSubmit: true,
+      progress: false,
     };
   }
 
@@ -82,9 +90,12 @@ class Login extends Component {
 
 
   handleValue = item => (event) => {
+    event.preventDefault();
     const { error, isTouched, hasError } = this.state;
+    const disableCheck = !(this.buttonChecked());
     this.setState({
       [item]: event.target.value,
+      disableSubmit: disableCheck,
       error: { ...error, [item]: '' },
       isTouched: { ...isTouched, [item]: true },
       hasError: { ...hasError, [item]: false },
@@ -148,9 +159,26 @@ class Login extends Component {
     return result;
   };
 
+  handleSignIn = async (event, value) => {
+    try {
+      event.preventDefault();
+      this.setState({ disableSubmit: true, progress: true });
+      const { email, password } = this.state;
+      const res = await callApi(email, password);
+      if (res.statusText === 'OK') {
+        localStorage.setItem('token', res.data.data);
+      }
+      // const item = localStorage.getItem('token');
+      this.props.history.push('/trainee');
+    } catch (error) {
+      this.setState({ disableSubmit: false, progress: false });
+      value('Incorrect email address or password', 'error');
+    }
+  }
 
   render() {
     const { classes } = this.props;
+    const { disableSubmit, progress } = this.state;
     const {
       email, password, showPassword, hasError, error,
     } = this.state;
@@ -209,16 +237,32 @@ class Login extends Component {
               ),
             }}
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            disabled={!(this.buttonChecked())}
-          >
+          <SnackBarContext.Consumer>
+            {
+              value => (
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                  disabled={disableSubmit}
+                  onClick={event => this.handleSignIn(event, value)}
+                >
+                  {
+                    (progress)
+                      ? (
+                        <div>
+                          <CircularProgress className={classes.progress} open={false} />
+                        </div>
+                      )
+                      : ''
+                  }
               Sign in
-          </Button>
+                </Button>
+              )
+            }
+          </SnackBarContext.Consumer>
         </Paper>
       </main>
     );

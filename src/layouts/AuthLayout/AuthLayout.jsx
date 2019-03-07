@@ -1,15 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Route, Redirect } from 'react-router-dom';
 import Footer from '../components/Footer';
 
 const AuthLayout = ({ children, ...rest }) => {
-  console.log('--------6--------');
-
+  if (!localStorage.getItem('token')) {
+    return (
+      <div>
+        {children}
+        <Footer />
+      </div>
+    );
+  }
   return (
-    <div>
-      {children}
-      <Footer />
-    </div>
+    <Route exact path="/">
+      <Redirect to="/trainee" />
+    </Route>
   );
 };
 AuthLayout.propTypes = {

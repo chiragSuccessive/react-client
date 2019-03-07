@@ -4,17 +4,26 @@ import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { PrivateLayout } from '../layouts';
 
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={matchProps => (
-      <PrivateLayout>
-        <Component {...matchProps} />
-      </PrivateLayout>
-    )}
-  />
-);
-
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  console.log('-------------------------', rest);
+  if (localStorage.getItem('token')) {
+    return (
+      <Route
+        {...rest}
+        render={matchProps => (
+          <PrivateLayout>
+            <Component {...matchProps} />
+          </PrivateLayout>
+        )}
+      />
+    );
+  }
+  return (
+    <Route exact path="/">
+      <Redirect to="/login" />
+    </Route>
+  );
+};
 PrivateRoute.propTypes = {
   component: PropTypes.objectOf(PropTypes.object).isRequired,
 };

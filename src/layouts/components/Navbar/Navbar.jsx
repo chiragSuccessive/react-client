@@ -20,6 +20,13 @@ const styles = {
   },
 };
 
+const handleLogOut = () => {
+  // event.preventDefault();
+  localStorage.removeItem('token');
+  console.log('---------------233-------------3443');
+
+};
+
 const Navbar = (props) => {
   const { classes } = props;
   return (
@@ -41,7 +48,7 @@ const Navbar = (props) => {
           <Link component={RouterLink} to="/children-demo" color="inherit">
             <Button color="inherit">CHILDREN DEMO</Button>
           </Link>
-          <Button color="inherit">LOGOUT</Button>
+          <Button color="inherit" component={RouterLink} to="/login" onClick={handleLogOut}>LOGOUT</Button>
         </Toolbar>
       </AppBar>
     </div>
