@@ -73,23 +73,24 @@ class AddDialogue extends Component {
   };
 
   handleValue = item => (event) => {
-    console.log('---------76-----------');
-
-    const { error, isTouched } = this.state;
-    const that = this;
+    const { error, isTouched, confirmPswd } = this.state;
+    let confirmpswdCheck = error[confirmPswd];
+    if (item === 'password') {
+      confirmpswdCheck = '';
+    }
     this.setState({
       [item]: event.target.value,
-      error: { ...error, [item]: '' },
+      error: { ...error, confirmPswd: confirmpswdCheck, [item]: '' },
       isTouched: { ...isTouched, [item]: true },
     }, () => {
-      console.log('---------82-------', this, item);
-
-      this.handleValidation(item);
+      if (item === 'password' && confirmPswd !== '') {
+        this.handleValidation('confirmPswd')();
+      }
+      this.handleValidation(item)();
     });
   };
 
   handleValidation = item => () => {
-    console.log('------------6-----------------', item);
     const {
       name,
       email,
@@ -152,7 +153,6 @@ class AddDialogue extends Component {
       email,
       password,
     } = this.state;
-
     onSubmit({ name, email, password });
   }
 
