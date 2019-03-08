@@ -5,7 +5,6 @@ import { PrivateLayout } from '../layouts';
 
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  console.log('-------------------------', rest);
   if (localStorage.getItem('token')) {
     return (
       <Route

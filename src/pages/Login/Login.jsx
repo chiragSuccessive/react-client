@@ -48,7 +48,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
   },
   progress: {
-    margin: theme.spacing.unit * 2,
+    margin: theme.spacing.unit * 0.2,
   },
 });
 
@@ -253,7 +253,7 @@ class Login extends Component {
                     (progress)
                       ? (
                         <div>
-                          <CircularProgress className={classes.progress} open={false} />
+                          <CircularProgress className={classes.progress} size={20} />
                         </div>
                       )
                       : ''
