@@ -157,7 +157,7 @@ class AddDialogue extends Component {
   }
 
   render() {
-    const { open, onClose, onSubmit } = this.props;
+    const { open, onClose } = this.props;
     const {
       name,
       email,

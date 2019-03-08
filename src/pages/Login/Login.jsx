@@ -43,7 +43,7 @@ const styles = theme => ({
   },
   textfield: {
     marginTop: theme.spacing.unit * 3,
-  }
+  },
 });
 
 const schema = yup.object().shape({
@@ -73,8 +73,6 @@ class Login extends Component {
         email: false,
         password: false,
       },
-      hasErrorCheck: false,
-      hasTouchedCheck: false,
     };
   }
 
@@ -84,12 +82,12 @@ class Login extends Component {
 
 
   handleValue = item => (event) => {
-    const { error, isTouched, hasErrorCheck } = this.state;
+    const { error, isTouched, hasError } = this.state;
     this.setState({
       [item]: event.target.value,
       error: { ...error, [item]: '' },
       isTouched: { ...isTouched, [item]: true },
-      hasErrorCheck: false,
+      hasError: { ...hasError, [item]: false },
     });
   };
 
@@ -101,7 +99,7 @@ class Login extends Component {
       confirmPswd,
       error,
       isTouched,
-      hasErrorCheck,
+      hasError,
     } = this.state;
 
     schema
@@ -120,18 +118,42 @@ class Login extends Component {
           if (res.path === item) {
             this.setState({
               error: { ...error, [item]: res.message },
-              hasErrorCheck: true,
+              hasError: { ...hasError, [item]: true },
             });
           }
         });
       });
   };
 
+  buttonChecked = () => {
+    const { hasError, isTouched } = this.state;
+    let notError = 0;
+    let touched = 0;
+    let result = false;
+    Object.keys(hasError).forEach((i) => {
+      if (hasError[i] === false) {
+        notError += 1;
+      }
+    });
+    Object.keys(isTouched).forEach((i) => {
+      if (isTouched[i] === true) {
+        touched += 1;
+      }
+    });
+    if (notError === 2 && touched === 2) {
+      result = true;
+    } else if (notError !== 2 && touched !== 2) {
+      result = false;
+    }
+    return result;
+  };
+
+
   render() {
     const { classes } = this.props;
-    const { email, password, showPassword, hasError, error } = this.state;
-    console.log('----------------state------------', this.state);
-    const temp = false;
+    const {
+      email, password, showPassword, hasError, error,
+    } = this.state;
     return (
       <main className={classes.main}>
         <CssBaseline />
@@ -193,7 +215,7 @@ class Login extends Component {
             variant="contained"
             color="primary"
             className={classes.submit}
-            disabled={temp}
+            disabled={!(this.buttonChecked())}
           >
               Sign in
           </Button>
