@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import Footer from '../components/Footer';
 
 const AuthLayout = ({ children, ...rest }) => {
-  console.log('--------6--------');
-
   return (
   <div>
     {children}
