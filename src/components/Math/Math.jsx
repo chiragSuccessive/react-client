@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
 const calculate = (first, second, operator) => {
@@ -32,6 +31,7 @@ const Math = (props) => {
     return children(first, second, operator, result);
   }
   return <div>{`${first} ${operator} ${second} = ${result}`}</div>;
+
 };
 
 Math.propTypes = {
