@@ -5,7 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Button from '@material-ui/core/Button';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
+import SnackbarContext from '../../contexts/contexts';
 
 class DeleteDialog extends Component {
   constructor(props) {
@@ -15,9 +15,18 @@ class DeleteDialog extends Component {
     };
   }
 
-  handleDeleteClose = () => {
+  handleDeleteClose = (event, value) => {
+    event.preventDefault();
     const { details, onClose } = this.props;
-    console.log('Deleted Item', details);
+    const originalDate = new Date(details.createdAt);
+    const dateCheck = new Date('2019-02-14');
+    if (originalDate > dateCheck) {
+
+      value('successfully deleted', 'success');
+      console.log('Deleted Item', details);
+    } else {
+      value('Can not Delete', 'error');
+    }
     onClose();
   };
 
@@ -40,9 +49,23 @@ class DeleteDialog extends Component {
           <Button onClick={onClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={this.handleDeleteClose} color="primary" variant="contained">
-            Delete
-          </Button>
+          <SnackbarContext.Consumer>
+            {
+              value => (
+                <Button
+                  onClick={(event) => {
+                    this.handleDeleteClose(event, value);
+                  }}
+                  color="primary"
+                  variant="contained"
+                >
+                Delete
+                </Button>
+              )
+            }
+
+          </SnackbarContext.Consumer>
+
         </DialogActions>
       </Dialog>
     );

@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Email from '@material-ui/icons/Email';
 import Person from '@material-ui/icons/Person';
+import SnackBarContext from '../../contexts/contexts';
 
 class EditDialog extends Component {
   constructor(props) {
@@ -26,72 +27,88 @@ class EditDialog extends Component {
     });
   };
 
-  onSubmit = () => {
+  onSubmit = (event) => {
+    event.preventDefault();
     const { details, onClose } = this.props;
     const obj = { name: details.name, email: details.email };
     console.log('Editted Item', obj);
     onClose();
   }
 
+
   render() {
     const { editOpen, onClose, details } = this.props;
     const { buttonEnable } = this.state;
     return (
-      <Dialog open={editOpen} onClose={this.handleClose}>
-        <DialogTitle>Add Trainee</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Enter your trainee details</DialogContentText>
-          <TextField
-            label="Name"
-            defaultValue={details.name}
-            margin="normal"
-            variant="outlined"
-            onChange={this.handleValue('name')}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Person />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <TextField
-            label="Email Address"
-            defaultValue={details.email}
-            margin="normal"
-            variant="outlined"
-            onChange={this.handleValue('email')}
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Email />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button color="primary" onClick={onClose}>
-              Cancel
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={this.onSubmit}
-            disabled={!buttonEnable}
-          >
-                Submit
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <>
+        <Dialog open={editOpen} onClose={this.handleClose}>
+          <DialogTitle>Add Trainee</DialogTitle>
+          <DialogContent>
+            <DialogContentText>Enter your trainee details</DialogContentText>
+            <TextField
+              label="Name"
+              defaultValue={details.name}
+              margin="normal"
+              variant="outlined"
+              onChange={this.handleValue('name')}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              fullWidth
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Person />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              label="Email Address"
+              defaultValue={details.email}
+              margin="normal"
+              variant="outlined"
+              onChange={this.handleValue('email')}
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Email />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button color="primary" onClick={onClose}>
+                  Cancel
+            </Button>
+            <SnackBarContext.Consumer>
+              {
+                value =>
+                  (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        this.onSubmit(event);
+                        value('successfully updated', 'success');
+                      }}
+                      disabled={!buttonEnable}
+                    >
+                  Submit
+                    </Button>
+                  )
+
+              }
+            </SnackBarContext.Consumer>
+          </DialogActions>
+        </Dialog>
+      </>
     );
   }
 }
