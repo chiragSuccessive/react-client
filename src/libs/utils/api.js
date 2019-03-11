@@ -13,8 +13,7 @@ const callApi = async (email, password) => {
     });
     return response;
   } catch (error) {
-    console.log('--------------------------------------error-------------------------', error);
-    throw new Error(error);
+    return error;
   }
 };
 export default callApi;

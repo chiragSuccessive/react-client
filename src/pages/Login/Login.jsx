@@ -160,20 +160,18 @@ class Login extends Component {
   };
 
   handleSignIn = async (event, value) => {
-    try {
-      event.preventDefault();
-      this.setState({ disableSubmit: true, progress: true });
-      const { email, password } = this.state;
-      const res = await callApi(email, password);
-      if (res.statusText === 'OK') {
-        localStorage.setItem('token', res.data.data);
-      }
-      // const item = localStorage.getItem('token');
+    event.preventDefault();
+    this.setState({ disableSubmit: true, progress: true });
+    const { email, password } = this.state;
+    const res = await callApi(email, password);
+    if (res.statusText === 'OK') {
+      localStorage.setItem('token', res.data.data);
       this.props.history.push('/trainee');
-    } catch (error) {
+    } else {
       this.setState({ disableSubmit: false, progress: false });
-      value('Incorrect email address or password', 'error');
+      value.openSnackBar('Incorrect email address or password', 'error');
     }
+    // const item = localStorage.getItem('token');
   }
 
   render() {
