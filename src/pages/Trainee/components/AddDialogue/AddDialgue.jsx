@@ -15,6 +15,7 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import * as yup from 'yup';
 import DialogActions from '@material-ui/core/DialogActions';
+import callApi from '../../../../libs/utils/api';
 
 
 const schema = yup.object().shape({
@@ -62,6 +63,7 @@ class AddDialogue extends Component {
         password: false,
         confirmPswd: false,
       },
+      disableSubmit: true,
     };
   }
 
@@ -76,12 +78,14 @@ class AddDialogue extends Component {
   handleValue = item => (event) => {
     const { error, isTouched, confirmPswd } = this.state;
     let confirmpswdCheck = error[confirmPswd];
+    const disableCheck = !(this.buttonChecked());
     if (item === 'password') {
       confirmpswdCheck = '';
     }
     this.setState({
       [item]: event.target.value,
       error: { ...error, confirmPswd: confirmpswdCheck, [item]: '' },
+      disableSubmit: disableCheck,
       isTouched: { ...isTouched, [item]: true },
     }, () => {
       if (item === 'password' && confirmPswd !== '') {
@@ -147,13 +151,26 @@ class AddDialogue extends Component {
     return result;
   };
 
-  onSubmit = () => {
+  onSubmit = async () => {
     const { onSubmit } = this.props;
     const {
       name,
       email,
       password,
     } = this.state;
+    const header = localStorage.getItem('token');
+    const res = await callApi('GET', { email, password }, '/trainee', header);
+    if (res.statusText === 'OK') {
+      // localStorage.setItem('token', res.data.data);
+      console.log('---------------------------success');
+
+      // this.props.history.push('/trainee');
+    } else {
+      console.log('------------------error 123');
+
+      // this.setState({ disableSubmit: false, progress: false });
+      // value.openSnackBar('Incorrect email address or password', 'error');
+    }
     onSubmit({ name, email, password });
   }
 
@@ -167,7 +184,10 @@ class AddDialogue extends Component {
       showPassword,
       showMatchPassword,
       error,
+      disableSubmit,
     } = this.state;
+    console.log('---------------------disable submit ', disableSubmit, '----------------------3443--', this.buttonChecked());
+
     return (
       <>
         <Dialog open={open} onClose={this.handleClose}>
@@ -281,7 +301,7 @@ class AddDialogue extends Component {
               variant="contained"
               color="primary"
               onClick={this.onSubmit}
-              disabled={!(this.buttonChecked())}
+              disabled={disableSubmit}
             >
                 Submit
             </Button>
