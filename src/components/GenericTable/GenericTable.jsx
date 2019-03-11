@@ -7,6 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 
 const styles = theme => ({
   root: {
@@ -17,44 +18,90 @@ const styles = theme => ({
   table: {
     minWidth: 500,
   },
+  row: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.background.default,
+    },
+    cursor: 'pointer',
+  },
 });
 
-function GenericTable(props) {
+const GenericTable = (props) => {
   const {
-    classes, data, columns, id,
+    classes,
+    data,
+    columns,
+    id,
+    orderBy,
+    order,
+    onSort,
+    onSelect,
+    active,
   } = props;
+
+  const createSortHandler = (event, label) => {
+    event.preventDefault();
+    onSort(label);
+  };
+
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
             {columns.map(row => (
-              <TableCell align={row.align}>{(row.label) ? row.label : row.field}</TableCell>
+              <TableCell align={row.align}>
+                <TableSortLabel
+                  active={active === row.label}
+                  direction={order}
+                  onClick={event => createSortHandler(event, row.label)}
+                >
+                  {row.label ? row.label : row.field}
+                </TableSortLabel>
+              </TableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
           {data.map(row => (
-            <TableRow>
-              <TableCell align="center">{row.name}</TableCell>
-              <TableCell>{row.email}</TableCell>
+            <TableRow
+              className={classes.row}
+              hover
+              onClick={event => onSelect(event, row.id)}
+            >
+              {columns.map((column) => {
+                let value = row[column.field];
+                const temp = column.format;
+                if (column.format) {
+                  value = temp(value);
+                }
+                return <TableCell align={column.align}>{value}</TableCell>;
+              })}
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </Paper>
   );
-}
+};
 
 GenericTable.propTypes = {
   classes: PropTypes.objectOf.isRequired,
   id: PropTypes.string,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  orderBy: PropTypes.string,
+  order: PropTypes.string,
+  onSort: PropTypes.func,
+  onSelect: PropTypes.func,
 };
 
 GenericTable.defaultProps = {
   id: '',
+  orderBy: '',
+  order: 'asc',
+  onSort: () => {},
+  onSelect: () => {},
 };
 
 export default withStyles(styles)(GenericTable);
