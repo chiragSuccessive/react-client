@@ -27,7 +27,11 @@ const Math = (props) => {
     children,
   } = props;
   const result = calculate(first, second, operator);
-  return children(first, second, operator, result);
+  if (children) {
+    return children(first, second, operator, result);
+  }
+  return <div>{`${first} ${operator} ${second} = ${result}`}</div>;
+
 };
 
 Math.propTypes = {
@@ -35,6 +39,10 @@ Math.propTypes = {
   second: PropTypes.number.isRequired,
   operator: PropTypes.string.isRequired,
   children: PropTypes.func,
+};
+
+Math.defaultProps = {
+  children: null,
 };
 
 

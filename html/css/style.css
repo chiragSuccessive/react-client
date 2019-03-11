@@ -1,3 +1,6 @@
+html {
+    background-image: url("../images/products/background.jpg");
+}
 .breadcrumbs li:after {
     padding: 15px;
     content: "/";
