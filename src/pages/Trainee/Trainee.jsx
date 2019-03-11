@@ -3,8 +3,8 @@ import Button from '@material-ui/core/Button';
 import AddDialogue from './components/AddDialogue';
 
 class Trainee extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       open: false,
     };

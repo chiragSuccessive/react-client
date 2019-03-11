@@ -24,7 +24,7 @@ const NoMatch = (props) => {
       NOT FOUND
       </div>
       <div className={classes.subHeading}>
-        {'Seems like page you are looking after does not exists'}
+        Seems like page you are looking after does not exists
       </div>
     </>
   );

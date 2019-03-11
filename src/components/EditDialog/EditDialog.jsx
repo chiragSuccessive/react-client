@@ -9,23 +9,70 @@ import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Email from '@material-ui/icons/Email';
 import Person from '@material-ui/icons/Person';
+import * as yup from 'yup';
 import SnackBarContext from '../../contexts/contexts';
 
+
+const schema = yup.object().shape({
+  name: yup
+    .string()
+    .min(3)
+    .required()
+    .label('Name'),
+  email: yup
+    .string()
+    .email()
+    .required(),
+});
 class EditDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
       buttonEnable: false,
+      error: {
+        name: '',
+        email: '',
+      },
     };
   }
 
   handleValue = item => (event) => {
     const { details } = this.props;
+    const { error } = this.state;
     details[item] = event.target.value;
     this.setState({
+      [item]: event.target.value,
       buttonEnable: true,
-    });
+      error: { ...error, [item]: '' },
+    }, this.handleValidation(item));
   };
+
+  handleValidation = (item) => {
+    const {
+      name,
+      email,
+      error,
+    } = this.state;
+
+    schema
+      .validate(
+        {
+          name,
+          email,
+        },
+        { abortEarly: false },
+      )
+      .then(this.setState({ error: { ...error, [item]: '' } }))
+      .catch((err) => {
+        err.inner.forEach((res) => {
+          if (res.path === item) {
+            this.setState({
+              error: { ...error, [item]: res.message },
+            });
+          }
+        });
+      });
+  }
 
   onSubmit = (event) => {
     event.preventDefault();
@@ -38,7 +85,7 @@ class EditDialog extends Component {
 
   render() {
     const { editOpen, onClose, details } = this.props;
-    const { buttonEnable } = this.state;
+    const { buttonEnable, name, email, error } = this.state;
     return (
       <>
         <Dialog open={editOpen} onClose={this.handleClose}>
@@ -47,10 +94,12 @@ class EditDialog extends Component {
             <DialogContentText>Enter your trainee details</DialogContentText>
             <TextField
               label="Name"
-              defaultValue={details.name}
+              value={details.name}
               margin="normal"
               variant="outlined"
               onChange={this.handleValue('name')}
+              helperText={error.name}
+              error={error.name}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -65,10 +114,12 @@ class EditDialog extends Component {
             />
             <TextField
               label="Email Address"
-              defaultValue={details.email}
+              value={details.email}
               margin="normal"
               variant="outlined"
               onChange={this.handleValue('email')}
+              helperText={error.email}
+              error={error.email}
               fullWidth
               InputLabelProps={{
                 shrink: true,
@@ -96,7 +147,7 @@ class EditDialog extends Component {
                       onClick={(event) => {
                         event.preventDefault();
                         this.onSubmit(event);
-                        value('successfully updated', 'success');
+                        value.openSnackBar('successfully updated', 'success');
                       }}
                       disabled={!buttonEnable}
                     >

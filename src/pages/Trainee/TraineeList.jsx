@@ -9,8 +9,8 @@ import SnackbarContext from '../../contexts/contexts';
 import getDateFormatted from '../../libs/utils/moment';
 
 class TraineeList extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       open: false,
       order: 'asc',
@@ -41,7 +41,7 @@ class TraineeList extends Component {
   handleSubmit = (details, value) => {
     this.setState({ open: false });
     console.log(details);
-    value('successfully added', 'success');
+    value.openSnackBar('successfully added', 'success');
   };
 
   handleSelect = (event, id) => {
