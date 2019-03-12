@@ -47,10 +47,13 @@ const styles1 = theme => ({
   },
 });
 
+
+
 function MySnackbarContent(props) {
   const {
-    classes, className, message, onClose, variant, ...other
+    classes, className, message, variant, onClose, ...other
   } = props;
+
   const temp = variant;
   const Icon = variantIcon[temp];
 
@@ -108,11 +111,10 @@ class CustomizedSnackbars extends React.Component {
     this.setState({ open: true });
   };
 
-  handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
+  handleClose = () => {
+    // if (reason === 'clickaway') {
+    //   return;
+    // }
     this.setState({ open: false });
   };
 
@@ -132,7 +134,7 @@ class CustomizedSnackbars extends React.Component {
     const { message, status, open } = this.state;
 
     return (
-      <SnackbarContext.Provider value={this.handleSnackBarOpen}>
+      <SnackbarContext.Provider value={{ openSnackBar: this.handleSnackBarOpen }}>
         <Snackbar
           anchorOrigin={{
             vertical: 'bottom',
@@ -145,6 +147,7 @@ class CustomizedSnackbars extends React.Component {
           <MySnackbarContentWrapper
             variant={status}
             message={message}
+            onClose={this.handleClose}
           />
         </Snackbar>
         {children}

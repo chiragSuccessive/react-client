@@ -28,8 +28,6 @@ const styles = theme => ({
   },
 });
 
-
-
 const GenericTable = (props) => {
   const {
     classes,
@@ -58,14 +56,14 @@ const GenericTable = (props) => {
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            {columns.map(row => (
+            {columns && columns.length && columns.map(row => (
               <TableCell align={row.align}>
                 <TableSortLabel
                   active={active === row.label}
                   direction={order}
                   onClick={event => createSortHandler(event, row.label)}
                 >
-                  {row.label ? row.label : row.field}
+                  {row.label || row.field}
                 </TableSortLabel>
               </TableCell>
             ))}
@@ -76,7 +74,7 @@ const GenericTable = (props) => {
             <TableRow
               className={classes.row}
             >
-              {columns.map((column) => {
+              {columns && columns.length && columns.map((column) => {
                 let value = row[column.field];
                 const temp = column.format;
                 if (column.format) {
@@ -86,7 +84,7 @@ const GenericTable = (props) => {
               })}
               <TableCell>
                 {
-                  actions.map((action) => {
+                  actions && actions.length && actions.map((action) => {
                     return <IconButton onClick={event => action.handler(event, row)}>{action.icon}</IconButton>;
                   })
                 }

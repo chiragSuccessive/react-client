@@ -22,10 +22,10 @@ class DeleteDialog extends Component {
     const dateCheck = new Date('2019-02-14');
     if (originalDate > dateCheck) {
 
-      value('successfully deleted', 'success');
+      value.openSnackBar('successfully deleted', 'success');
       console.log('Deleted Item', details);
     } else {
-      value('Can not Delete', 'error');
+      value.openSnackBar('Can not Delete', 'error');
     }
     onClose();
   };
@@ -63,9 +63,7 @@ class DeleteDialog extends Component {
                 </Button>
               )
             }
-
           </SnackbarContext.Consumer>
-
         </DialogActions>
       </Dialog>
     );
