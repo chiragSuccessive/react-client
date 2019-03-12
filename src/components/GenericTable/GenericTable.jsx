@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import TablePagination from '@material-ui/core/TablePagination';
 import IconButton from '@material-ui/core/IconButton';
+import withLoaderAndMessage from '../HOC';
 
 const styles = theme => ({
   root: {
@@ -70,7 +71,7 @@ const GenericTable = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map(row => (
+          {data && data.length && data.map(row => (
             <TableRow
               className={classes.row}
             >
@@ -136,4 +137,4 @@ GenericTable.defaultProps = {
   onSelect: () => {},
 };
 
-export default withStyles(styles)(GenericTable);
+export default withLoaderAndMessage((withStyles(styles)(GenericTable)));

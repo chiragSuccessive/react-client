@@ -7,6 +7,8 @@ import trainee from './data/trainee';
 import AddDialogue from './components/AddDialogue';
 import SnackbarContext from '../../contexts/contexts';
 import getDateFormatted from '../../libs/utils/moment';
+import callApi from '../../libs/utils/api';
+import limit from './data/constants';
 
 class TraineeList extends Component {
   constructor(props) {
@@ -19,7 +21,30 @@ class TraineeList extends Component {
       editOpen: false,
       traineeData: '',
       page: 0,
+      records: {},
+      loader: false,
+      count: 0,
     };
+  }
+
+  componentDidMount() {
+    this.getApi();
+  }
+
+  getApi = async () => {
+    const { value } = this.props;
+    const { page } = this.state;
+    this.setState({ loader: true });
+    const header = localStorage.getItem('token');
+    const params = { limit, skip: page * limit };
+    const res = await callApi('GET', {}, '/trainee', header, params);
+    if (res.statusText === 'OK') {
+      this.setState({ records: res.data.data.records, count: res.data.data.count });
+      // value.openSnackBar('success', 'success');
+    } else {
+      value.openSnackBar('Error', 'error');
+    }
+    this.setState({ loader: false });
   }
 
   handleClickOpen = () => {
@@ -67,11 +92,11 @@ class TraineeList extends Component {
 
   handleChangePage = (event, page) => {
     this.setState({ page });
+    this.getApi();
   }
 
   render() {
     const { open, traineeData } = this.state;
-
     const columns = [
       {
         field: 'name',
@@ -102,45 +127,41 @@ class TraineeList extends Component {
         handler: this.handleRemoveDialogOpen,
       },
     ];
-
+    const { value } = this.props;
     const {
-      order, active, deleteOpen, editOpen, page,
+      order, active, deleteOpen, editOpen, page, count, records, loader,
     } = this.state;
+
     return (
       <>
         <div align="right">
           <Button
             variant="outlined"
             color="primary"
-            onClick={this.handleClickOpen}
+            onClick={this.handlopenSnackBareClickOpen}
           >
             ADD TRAINEELIST
           </Button>
-          <SnackbarContext.Consumer>
-            {
-              value => (
-                <AddDialogue
-                  open={open}
-                  onClose={this.handleClose}
-                  onSubmit={(details) => this.handleSubmit(details, value)}
-                />
-              )
-            }
-          </SnackbarContext.Consumer>
-
+          <AddDialogue
+            open={open}
+            onClose={this.handleClose}
+            onSubmit={details => this.handleSubmit(details, value)}
+          />
         </div>
         <GenericTable
-          data={trainee}
+          data={records}
           columns={columns}
           onSelect={this.handleSelect}
           order={order}
           onSort={this.handleOnSort}
           active={active}
           actions={actions}
-          count={100}
-          rowsPerPage={5}
+          count={count}
           page={page}
+          rowsPerPage={limit}
           onChangePage={this.handleChangePage}
+          loader={loader}
+          dataLength={count}
         />
         <DeleteDialog deleteOpen={deleteOpen} onClose={this.handleDeleteClose} details={traineeData} />
         <EditDialog
@@ -152,4 +173,10 @@ class TraineeList extends Component {
     );
   }
 }
-export default TraineeList;
+export default ({ ...rest }) => (
+  <SnackbarContext.Consumer>
+    {
+      value => <TraineeList value={value} {...rest} />
+    }
+  </SnackbarContext.Consumer>
+);

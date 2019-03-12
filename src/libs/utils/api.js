@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 
-const callApi = async (method, data, url, header) => {
+const callApi = async (method, data, url, header, params) => {
   try {
     console.log('---------here 6');
 
@@ -13,6 +13,7 @@ const callApi = async (method, data, url, header) => {
       headers: {
         authorization: header,
       },
+      params,
     });
     return response;
   } catch (error) {

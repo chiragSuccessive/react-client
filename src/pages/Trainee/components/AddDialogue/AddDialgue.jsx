@@ -15,8 +15,8 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import * as yup from 'yup';
 import DialogActions from '@material-ui/core/DialogActions';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import callApi from '../../../../libs/utils/api';
-
 
 const schema = yup.object().shape({
   name: yup
@@ -63,7 +63,7 @@ class AddDialogue extends Component {
         password: false,
         confirmPswd: false,
       },
-      disableSubmit: true,
+      spinner: false,
     };
   }
 
@@ -78,14 +78,13 @@ class AddDialogue extends Component {
   handleValue = item => (event) => {
     const { error, isTouched, confirmPswd } = this.state;
     let confirmpswdCheck = error[confirmPswd];
-    const disableCheck = !(this.buttonChecked());
+
     if (item === 'password') {
       confirmpswdCheck = '';
     }
     this.setState({
       [item]: event.target.value,
       error: { ...error, confirmPswd: confirmpswdCheck, [item]: '' },
-      disableSubmit: disableCheck,
       isTouched: { ...isTouched, [item]: true },
     }, () => {
       if (item === 'password' && confirmPswd !== '') {
@@ -152,6 +151,7 @@ class AddDialogue extends Component {
   };
 
   onSubmit = async () => {
+    this.setState({ spinner: true });
     const { onSubmit } = this.props;
     const {
       name,
@@ -161,15 +161,11 @@ class AddDialogue extends Component {
     const header = localStorage.getItem('token');
     const res = await callApi('GET', { email, password }, '/trainee', header);
     if (res.statusText === 'OK') {
-      // localStorage.setItem('token', res.data.data);
       console.log('---------------------------success');
-
-      // this.props.history.push('/trainee');
+      this.setState({ spinner: false })
     } else {
+      this.setState({ spinner: false });
       console.log('------------------error 123');
-
-      // this.setState({ disableSubmit: false, progress: false });
-      // value.openSnackBar('Incorrect email address or password', 'error');
     }
     onSubmit({ name, email, password });
   }
@@ -184,10 +180,8 @@ class AddDialogue extends Component {
       showPassword,
       showMatchPassword,
       error,
-      disableSubmit,
+      spinner
     } = this.state;
-    console.log('---------------------disable submit ', disableSubmit, '----------------------3443--', this.buttonChecked());
-
     return (
       <>
         <Dialog open={open} onClose={this.handleClose}>
@@ -301,8 +295,17 @@ class AddDialogue extends Component {
               variant="contained"
               color="primary"
               onClick={this.onSubmit}
-              disabled={disableSubmit}
+              disabled={!this.buttonChecked()}
             >
+              {
+                (spinner)
+                  ? (
+                    <div>
+                      <CircularProgress size={20} />
+                    </div>
+                  )
+                  : ''
+              }
                 Submit
             </Button>
           </DialogActions>
