@@ -11,8 +11,6 @@ const withLoaderAndMessage = WrappedComponent => (
     }
 
     render() {
-      console.log('--------13------', this.props);
-
       const { loader, dataLength, ...rest } = this.props;
       console.log('loader', dataLength);
       return (

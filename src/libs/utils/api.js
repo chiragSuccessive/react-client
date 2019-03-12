@@ -3,8 +3,6 @@ import axios from 'axios';
 
 const callApi = async (method, data, url, header, params) => {
   try {
-    console.log('---------here 6');
-
     const response = await axios({
       method,
       baseURL: 'https://express-training.herokuapp.com/api',
@@ -17,8 +15,6 @@ const callApi = async (method, data, url, header, params) => {
     });
     return response;
   } catch (error) {
-    console.log('here--------------16', error);
-
     return error;
   }
 };

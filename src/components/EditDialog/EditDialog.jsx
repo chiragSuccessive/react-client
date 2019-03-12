@@ -10,8 +10,9 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Email from '@material-ui/icons/Email';
 import Person from '@material-ui/icons/Person';
 import * as yup from 'yup';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import SnackBarContext from '../../contexts/contexts';
-
+import callApi from '../../libs/utils/api';
 
 const schema = yup.object().shape({
   name: yup
@@ -33,6 +34,7 @@ class EditDialog extends Component {
         name: '',
         email: '',
       },
+      loader: false,
     };
   }
 
@@ -74,18 +76,34 @@ class EditDialog extends Component {
       });
   }
 
-  onSubmit = (event) => {
+  onSubmit = async (event, value) => {
     event.preventDefault();
     const { details, onClose } = this.props;
-    const obj = { name: details.name, email: details.email };
-    console.log('Editted Item', obj);
+    const { name, email } = this.state;
+    const header = localStorage.getItem('token');
+    const data = {
+      id: details.originalId,
+      name,
+      email,
+    };
+    this.setState({ loader: true, buttonEnable: false });
+    const res = await callApi('put', data, '/trainee', header);
+    if (res.status === 200) {
+      value.openSnackBar('Successfully updated', 'success');
+    } else {
+      value.openSnackBar('Updation unsuccessful', 'error');
+    }
+    this.setState({ loader: false, buttonEnable: true });
     onClose();
   }
 
 
   render() {
     const { editOpen, onClose, details } = this.props;
-    const { buttonEnable, name, email, error } = this.state;
+    const {
+      buttonEnable, name, email, error, loader
+    } = this.state;
+
     return (
       <>
         <Dialog open={editOpen} onClose={this.handleClose}>
@@ -139,21 +157,24 @@ class EditDialog extends Component {
             </Button>
             <SnackBarContext.Consumer>
               {
-                value =>
-                  (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        this.onSubmit(event);
-                        value.openSnackBar('successfully updated', 'success');
-                      }}
-                      disabled={!buttonEnable}
-                    >
+                value => (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      this.onSubmit(event, value);
+                    }}
+                    disabled={!buttonEnable}
+                  >
+                    {
+                      (loader)
+                        ? <CircularProgress size={20} />
+                        : ''
+                    }
                   Submit
-                    </Button>
-                  )
+                  </Button>
+                )
 
               }
             </SnackBarContext.Consumer>

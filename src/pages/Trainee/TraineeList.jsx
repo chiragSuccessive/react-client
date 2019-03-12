@@ -91,8 +91,7 @@ class TraineeList extends Component {
   };
 
   handleChangePage = (event, page) => {
-    this.setState({ page });
-    this.getApi();
+    this.setState({ page }, () => this.getApi());
   }
 
   render() {
@@ -138,7 +137,7 @@ class TraineeList extends Component {
           <Button
             variant="outlined"
             color="primary"
-            onClick={this.handlopenSnackBareClickOpen}
+            onClick={this.handleClickOpen}
           >
             ADD TRAINEELIST
           </Button>

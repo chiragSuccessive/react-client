@@ -159,13 +159,13 @@ class AddDialogue extends Component {
       password,
     } = this.state;
     const header = localStorage.getItem('token');
-    const res = await callApi('GET', { email, password }, '/trainee', header);
+    const res = await callApi('post', { name, email, password }, '/trainee', header);
+    console.log(':::::::::::::::::::;;;;;;ere;;;;;;;;;;;;;;;;;;', res);
+
     if (res.statusText === 'OK') {
-      console.log('---------------------------success');
-      this.setState({ spinner: false })
+      this.setState({ spinner: false });
     } else {
       this.setState({ spinner: false });
-      console.log('------------------error 123');
     }
     onSubmit({ name, email, password });
   }
@@ -180,7 +180,7 @@ class AddDialogue extends Component {
       showPassword,
       showMatchPassword,
       error,
-      spinner
+      spinner,
     } = this.state;
     return (
       <>
