@@ -91,8 +91,7 @@ class TraineeList extends Component {
   };
 
   handleChangePage = (event, page) => {
-    this.setState({ page });
-    this.getApi();
+    this.setState({ page }, () => this.getApi());
   }
 
   render() {
