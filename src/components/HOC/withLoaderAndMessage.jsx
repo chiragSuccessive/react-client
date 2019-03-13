@@ -11,21 +11,4 @@ const withLoaderAndMessage = WrappedComponent => ({ loader, dataLength, ...rest 
     )
 );
 
-//   // class HOC extends Component {
-//   //   constructor(props) {
-//   //     super(props);
-//   //     this.state = {
-
-//   //     };
-//   //   }
-
-//     render() {
-//       console.log('--------13------', this.props);
-
-//       const { loader, dataLength, ...rest } = this.props;
-//       console.log('loader', dataLength);
-//       return
-//     }
-//   }
-// );
 export default withLoaderAndMessage;

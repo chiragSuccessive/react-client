@@ -161,11 +161,9 @@ class AddDialogue extends Component {
     const header = localStorage.getItem('token');
     const res = await callApi('GET', { email, password }, '/trainee', header);
     if (res.statusText === 'OK') {
-      console.log('---------------------------success');
       this.setState({ spinner: false })
     } else {
       this.setState({ spinner: false });
-      console.log('------------------error 123');
     }
     onSubmit({ name, email, password });
   }
