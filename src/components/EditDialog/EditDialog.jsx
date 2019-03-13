@@ -49,7 +49,7 @@ class EditDialog extends Component {
     }, this.handleValidation(item));
   };
 
-  handleValidation = (item) => {
+  handleValidation = item => () => {
     const {
       name,
       email,
@@ -136,6 +136,7 @@ class EditDialog extends Component {
               margin="normal"
               variant="outlined"
               onChange={this.handleValue('email')}
+              onBlur={this.handleValidation('email')}
               helperText={error.email}
               error={error.email}
               fullWidth
@@ -175,7 +176,6 @@ class EditDialog extends Component {
                   Submit
                   </Button>
                 )
-
               }
             </SnackBarContext.Consumer>
           </DialogActions>

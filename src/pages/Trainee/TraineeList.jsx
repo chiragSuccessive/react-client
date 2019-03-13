@@ -56,7 +56,7 @@ class TraineeList extends Component {
   };
 
   handleDeleteClose = () => {
-    this.setState({ deleteOpen: false });
+    this.setState({ deleteOpen: false }, () => this.getApi());
   }
 
   handleEditClose = () => {

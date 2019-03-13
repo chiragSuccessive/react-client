@@ -12,14 +12,13 @@ const withLoaderAndMessage = WrappedComponent => (
 
     render() {
       const { loader, dataLength, ...rest } = this.props;
-      console.log('loader', dataLength);
       return (
         (loader)
           ? (<div style={{marginTop: 200,marginLeft: 550}}><CircularProgress size={200} /></div>)
           : (
             (dataLength !== 0)
             ? (<WrappedComponent {...rest} />)
-            : <div>" OOPS!, No More Trainees"</div>
+            : <div style={{fontSize: 40, textAlign: 'center'}}>OOPS!, No More Trainees</div>
           )
       );
     }
