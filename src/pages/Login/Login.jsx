@@ -163,7 +163,7 @@ class Login extends Component {
     event.preventDefault();
     this.setState({ disableSubmit: true, progress: true });
     const { email, password } = this.state;
-    const res = await callApi(email, password);
+    const res = await callApi('post', { email, password }, '/user/login');
     if (res.statusText === 'OK') {
       localStorage.setItem('token', res.data.data);
       this.props.history.push('/trainee');

@@ -15,7 +15,8 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import * as yup from 'yup';
 import DialogActions from '@material-ui/core/DialogActions';
-
+import CircularProgress from '@material-ui/core/CircularProgress';
+import callApi from '../../../../libs/utils/api';
 
 const schema = yup.object().shape({
   name: yup
@@ -62,6 +63,7 @@ class AddDialogue extends Component {
         password: false,
         confirmPswd: false,
       },
+      spinner: false,
     };
   }
 
@@ -76,6 +78,7 @@ class AddDialogue extends Component {
   handleValue = item => (event) => {
     const { error, isTouched, confirmPswd } = this.state;
     let confirmpswdCheck = error[confirmPswd];
+
     if (item === 'password') {
       confirmpswdCheck = '';
     }
@@ -147,13 +150,21 @@ class AddDialogue extends Component {
     return result;
   };
 
-  onSubmit = () => {
+  onSubmit = async () => {
+    this.setState({ spinner: true });
     const { onSubmit } = this.props;
     const {
       name,
       email,
       password,
     } = this.state;
+    const header = localStorage.getItem('token');
+    const res = await callApi('GET', { email, password }, '/trainee', header);
+    if (res.statusText === 'OK') {
+      this.setState({ spinner: false })
+    } else {
+      this.setState({ spinner: false });
+    }
     onSubmit({ name, email, password });
   }
 
@@ -167,6 +178,7 @@ class AddDialogue extends Component {
       showPassword,
       showMatchPassword,
       error,
+      spinner
     } = this.state;
     return (
       <>
@@ -281,8 +293,17 @@ class AddDialogue extends Component {
               variant="contained"
               color="primary"
               onClick={this.onSubmit}
-              disabled={!(this.buttonChecked())}
+              disabled={!this.buttonChecked()}
             >
+              {
+                (spinner)
+                  ? (
+                    <div>
+                      <CircularProgress size={20} />
+                    </div>
+                  )
+                  : ''
+              }
                 Submit
             </Button>
           </DialogActions>
