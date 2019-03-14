@@ -28,7 +28,7 @@ const schema = yup.object().shape({
 class EditDialog extends Component {
   constructor(props) {
     super(props);
-    const { details } = this.props;
+    const { details } = props;
     this.state = {
       name: details.name,
       email: details.email,
@@ -84,8 +84,7 @@ class EditDialog extends Component {
     onClose();
   }
 
-  onSubmit = async (event, value) => {
-    event.preventDefault();
+  onSubmit = async (value) => {
     const { details, onClose, reload } = this.props;
     const { name, email } = this.state;
     const header = localStorage.getItem('token');
@@ -173,7 +172,7 @@ class EditDialog extends Component {
                     color="primary"
                     onClick={(event) => {
                       event.preventDefault();
-                      this.onSubmit(event, value);
+                      this.onSubmit(value);
                     }}
                     disabled={!buttonEnable}
                   >
