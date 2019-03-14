@@ -1,14 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-
-const styles = {
-  root: {
-    flexGrow: 1,
-    marginTop: '20px',
-    textAlign: 'center',
-  },
-};
+import styles from './styles';
 
 const Footer = (props) => {
   const { classes } = props;

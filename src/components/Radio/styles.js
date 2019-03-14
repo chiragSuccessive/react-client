@@ -1,4 +1,4 @@
-const style = {
+const styles = {
   base: {
     padding: '10px',
     width: '90%',
@@ -10,4 +10,4 @@ const style = {
     color: 'red',
   },
 };
-export default style;
+export default styles;

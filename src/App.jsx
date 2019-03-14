@@ -8,7 +8,7 @@ import {
 import SnackBarProvider from './contexts/SnackBarProvider';
 import {
   Login,
-  Trainee,
+  // Trainee,
   TraineeList,
   TraineeDetail,
   TextFieldDemo,

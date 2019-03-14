@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import style from './style';
+import styles from './styles';
 
 const Button = (props) => {
   const {
@@ -12,20 +12,20 @@ const Button = (props) => {
   } = props;
   return (
     <>
-      <button type="button" onClick={onClick} disabled={disabled} {...rest} style={{ ...style.base, ...color }}>{value}</button>
+      <button type="button" onClick={onClick} disabled={disabled} {...rest} style={{ ...styles.base, ...color }}>{value}</button>
     </>
   );
 };
 
 Button.propTypes = {
-  style: PropTypes.objectOf(PropTypes.string),
+  styles: PropTypes.objectOf(PropTypes.string),
   color: PropTypes.string,
   disabled: PropTypes.bool,
   value: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 Button.defaultProps = {
-  style: {},
+  styles: {},
   color: 'primary',
   disabled: false,
 };

@@ -11,31 +11,13 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import TablePagination from '@material-ui/core/TablePagination';
 import IconButton from '@material-ui/core/IconButton';
 import withLoaderAndMessage from '../HOC';
-
-const styles = theme => ({
-  root: {
-    width: '100%',
-    margin: 'auto',
-    marginTop: theme.spacing.unit * 3,
-  },
-  table: {
-    minWidth: 500,
-  },
-  row: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.background.default,
-    },
-    cursor: 'pointer',
-  },
-});
+import styles from './styles';
 
 const GenericTable = (props) => {
   const {
     classes,
     data,
     columns,
-    id,
-    orderBy,
     order,
     onSort,
     onSelect,
@@ -120,21 +102,32 @@ const GenericTable = (props) => {
 
 GenericTable.propTypes = {
   classes: PropTypes.objectOf.isRequired,
-  id: PropTypes.string,
+  // id: PropTypes.string,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  orderBy: PropTypes.string,
+  // orderBy: PropTypes.string,
   order: PropTypes.string,
   onSort: PropTypes.func,
   onSelect: PropTypes.func,
+  active: PropTypes.bool,
+  actions: PropTypes.arrayOf(PropTypes.object),
+  rowsPerPage: PropTypes.number,
+  page: PropTypes.number,
+  count: PropTypes.number.isRequired,
+  onChangePage: PropTypes.func,
 };
 
 GenericTable.defaultProps = {
-  id: '',
-  orderBy: '',
+  // id: '',
+  // orderBy: '',
   order: 'asc',
   onSort: () => {},
   onSelect: () => {},
+  active: false,
+  actions: [],
+  rowsPerPage: 10,
+  page: 0,
+  onChangePage: () => {},
 };
 
 export default withLoaderAndMessage((withStyles(styles)(GenericTable)));

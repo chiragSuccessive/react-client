@@ -11,6 +11,7 @@ import Email from '@material-ui/icons/Email';
 import Person from '@material-ui/icons/Person';
 import * as yup from 'yup';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import PropTypes from 'prop-types';
 import SnackBarContext from '../../contexts/contexts';
 import callApi from '../../libs/utils/api';
 
@@ -192,4 +193,17 @@ class EditDialog extends Component {
     );
   }
 }
+
+EditDialog.propTypes = {
+  editOpen: PropTypes.bool,
+  onClose: PropTypes.func,
+  details: PropTypes.arrayOf(PropTypes.object),
+};
+
+EditDialog.defaultProps = {
+  editOpen: false,
+  onClose: () => {},
+  details: [],
+};
+
 export default EditDialog;

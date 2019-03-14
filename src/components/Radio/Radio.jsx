@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import style from './style';
+import styles from './styles';
 
 const Radio = (props) => {
   const {
@@ -19,7 +19,7 @@ const Radio = (props) => {
           {val.label}
         </div>
       ))}
-      {error ? <p style={style.errorColor}>{error}</p> : ''}
+      {error ? <p style={styles.errorColor}>{error}</p> : ''}
     </>
   );
 };

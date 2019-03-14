@@ -7,18 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import { Link as RouterLink } from 'react-router-dom';
-
-const styles = {
-  root: {
-    flexGrow: 1,
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  margin: {
-    marginBottom: '10px',
-  },
-};
+import styles from './styles';
 
 const handleLogOut = () => {
   // event.preventDefault();
