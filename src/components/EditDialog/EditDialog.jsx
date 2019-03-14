@@ -28,7 +28,10 @@ const schema = yup.object().shape({
 class EditDialog extends Component {
   constructor(props) {
     super(props);
+    const { details } = this.props;
     this.state = {
+      name: details.name,
+      email: details.email,
       buttonEnable: false,
       error: {
         name: '',
@@ -39,9 +42,7 @@ class EditDialog extends Component {
   }
 
   handleValue = item => (event) => {
-    const { details } = this.props;
     const { error } = this.state;
-    details[item] = event.target.value;
     this.setState({
       [item]: event.target.value,
       buttonEnable: true,
@@ -76,9 +77,16 @@ class EditDialog extends Component {
       });
   }
 
-  onSubmit = async (event, value) => {
+  handleOnClose = (event) => {
     event.preventDefault();
     const { details, onClose } = this.props;
+    this.setState({ name: details.name, email: details.email });
+    onClose();
+  }
+
+  onSubmit = async (event, value) => {
+    event.preventDefault();
+    const { details, onClose, reload } = this.props;
     const { name, email } = this.state;
     const header = localStorage.getItem('token');
     const data = {
@@ -95,13 +103,14 @@ class EditDialog extends Component {
     }
     this.setState({ loader: false, buttonEnable: true });
     onClose();
+    reload();
   }
 
 
   render() {
     const { editOpen, onClose, details } = this.props;
     const {
-      buttonEnable, name, email, error, loader
+      buttonEnable, name, email, error, loader,
     } = this.state;
 
     return (
@@ -112,7 +121,7 @@ class EditDialog extends Component {
             <DialogContentText>Enter your trainee details</DialogContentText>
             <TextField
               label="Name"
-              value={details.name}
+              value={name}
               margin="normal"
               variant="outlined"
               onChange={this.handleValue('name')}
@@ -132,7 +141,7 @@ class EditDialog extends Component {
             />
             <TextField
               label="Email Address"
-              value={details.email}
+              value={email}
               margin="normal"
               variant="outlined"
               onChange={this.handleValue('email')}
@@ -153,7 +162,7 @@ class EditDialog extends Component {
             />
           </DialogContent>
           <DialogActions>
-            <Button color="primary" onClick={onClose}>
+            <Button color="primary" onClick={event => this.handleOnClose(event)}>
                   Cancel
             </Button>
             <SnackBarContext.Consumer>
