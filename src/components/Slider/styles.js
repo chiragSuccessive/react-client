@@ -1,6 +1,6 @@
-const style = {
+const styles = {
   align: {
     textAlign: 'center',
   },
 };
-export default style;
+export default styles;

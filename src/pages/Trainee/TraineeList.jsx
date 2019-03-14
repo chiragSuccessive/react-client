@@ -3,7 +3,6 @@ import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { GenericTable, DeleteDialog, EditDialog } from '../../components';
-import trainee from './data/trainee';
 import AddDialogue from './components/AddDialogue';
 import SnackbarContext from '../../contexts/contexts';
 import getDateFormatted from '../../libs/utils/moment';

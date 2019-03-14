@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import style from './style';
+import styles from './styles';
 
 const TextField = (props) => {
   const { error, ...rest } = props;
-  const errorBorder = error ? style.errorBorder : {};
+  const errorBorder = error ? styles.errorBorder : {};
   return (
     <>
-      <input type="text" {...rest} style={{ ...style.base, ...errorBorder }} />
-      {error ? <p style={style.errorColor}>{error}</p> : ''}
+      <input type="text" {...rest} style={{ ...styles.base, ...errorBorder }} />
+      {error ? <p style={styles.errorColor}>{error}</p> : ''}
     </>
   );
 };

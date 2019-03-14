@@ -64,7 +64,6 @@ class AddDialogue extends Component {
         confirmPswd: false,
       },
       spinner: false,
-      // buttonDisable: true,
     };
   }
 
@@ -83,27 +82,25 @@ class AddDialogue extends Component {
     if (item === 'password') {
       confirmpswdCheck = '';
     }
-    this.setState({
-      [item]: event.target.value,
-      error: { ...error, confirmPswd: confirmpswdCheck, [item]: '' },
-      isTouched: { ...isTouched, [item]: true },
-    }, () => {
-      if (item === 'password' && confirmPswd !== '') {
-        this.handleValidation('confirmPswd')();
-      }
-      this.handleValidation(item)();
-    });
+    this.setState(
+      {
+        [item]: event.target.value,
+        error: { ...error, confirmPswd: confirmpswdCheck, [item]: '' },
+        isTouched: { ...isTouched, [item]: true },
+      },
+      () => {
+        if (item === 'password' && confirmPswd !== '') {
+          this.handleValidation('confirmPswd')();
+        }
+        this.handleValidation(item)();
+      },
+    );
   };
 
   handleValidation = item => () => {
     const {
-      name,
-      email,
-      password,
-      confirmPswd,
-      error,
-      isTouched,
-    } = this.state;
+      name, email, password, confirmPswd, error, isTouched,
+} = this.state;
 
     schema
       .validate(
@@ -115,7 +112,15 @@ class AddDialogue extends Component {
         },
         { abortEarly: false },
       )
-      .then(this.setState({ isTouched: { ...isTouched, [item]: true, error: { ...error, [item]: '' } } }))
+      .then(
+        this.setState({
+          isTouched: {
+            ...isTouched,
+            [item]: true,
+            error: { ...error, [item]: '' },
+          },
+        }),
+      )
       .catch((err) => {
         err.inner.forEach((res) => {
           if (res.path === item) {
@@ -126,11 +131,9 @@ class AddDialogue extends Component {
           }
         });
       });
-    // this.setState({ buttonDisable: !(this.buttonChecked()) });
-    // const { buttonDisable } = this.state;
   };
 
-  buttonChecked = () => {
+  buttonChecked =() => {
     const { error, isTouched } = this.state;
     let notError = 0;
     let touched = 0;
@@ -156,13 +159,14 @@ class AddDialogue extends Component {
   onSubmit = async () => {
     this.setState({ spinner: true });
     const { onSubmit } = this.props;
-    const {
-      name,
-      email,
-      password,
-    } = this.state;
+    const { name, email, password } = this.state;
     const header = localStorage.getItem('token');
-    const res = await callApi('post', { name, email, password }, '/trainee', header);
+    const res = await callApi(
+      'post',
+      { name, email, password },
+      '/trainee',
+      header,
+    );
 
     if (res.statusText === 'OK') {
       this.setState({ spinner: false });
@@ -170,7 +174,7 @@ class AddDialogue extends Component {
       this.setState({ spinner: false });
     }
     onSubmit({ name, email, password });
-  }
+  };
 
   render() {
     const { open, onClose } = this.props;
@@ -183,7 +187,6 @@ class AddDialogue extends Component {
       showMatchPassword,
       error,
       spinner,
-      // buttonDisable
     } = this.state;
     return (
       <>
@@ -252,7 +255,7 @@ class AddDialogue extends Component {
                     startAdornment: (
                       <InputAdornment position="start">
                         <IconButton onClick={this.handleClickShowPassword}>
-                          {showPassword ? <Visibility /> : <VisibilityOff /> }
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
                         </IconButton>
                       </InputAdornment>
                     ),
@@ -298,18 +301,16 @@ class AddDialogue extends Component {
               variant="contained"
               color="primary"
               onClick={this.onSubmit}
-              disabled={!(this.buttonChecked())}
+              disabled={!this.buttonChecked()}
             >
-              {
-                (spinner)
-                  ? (
-                    <div>
-                      <CircularProgress size={20} />
-                    </div>
-                  )
-                  : ''
-              }
-                Submit
+              {spinner ? (
+                <div>
+                  <CircularProgress size={20} />
+                </div>
+              ) : (
+                ''
+              )}
+              Submit
             </Button>
           </DialogActions>
         </Dialog>

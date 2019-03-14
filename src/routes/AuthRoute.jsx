@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { AuthLayout as LoginLayout } from '../layouts';

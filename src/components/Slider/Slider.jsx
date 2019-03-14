@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { getNextRoundRobin, getRandomNumber } from '../../libs/utils/math';
-import style from './style';
+import styles from './styles';
 import { DEFAULT_BANNER_IMAGE } from '../../config/constants';
 
 class Slider extends Component {
@@ -30,7 +30,7 @@ class Slider extends Component {
     const { banners, defaultBanner, ...rest } = this.props;
     const { index } = this.state;
     const source = banners.length ? banners[index] : defaultBanner;
-    const { align } = style;
+    const { align } = styles;
     return (
       <div style={align}>
         <img src={source} alt="anyimage" {...rest} />

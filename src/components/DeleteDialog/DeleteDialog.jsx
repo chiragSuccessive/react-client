@@ -6,6 +6,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import Button from '@material-ui/core/Button';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import PropTypes from 'prop-types';
 import SnackbarContext from '../../contexts/contexts';
 import callApi from '../../libs/utils/api';
 
@@ -13,7 +14,6 @@ class DeleteDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,
       loader: false,
       buttonDisable: false,
     };
@@ -22,7 +22,6 @@ class DeleteDialog extends Component {
   handleDeleteClose = async (event, value) => {
     event.preventDefault();
     const { details, onClose } = this.props;
-    const originalDate = new Date(details.createdAt);
     const header = localStorage.getItem('token');
     this.setState({ loader: true, buttonDisable: true });
     const res = await callApi('DELETE', {}, `/trainee/${details.originalId}`, header);
@@ -38,7 +37,7 @@ class DeleteDialog extends Component {
 
   render() {
     const { deleteOpen, onClose } = this.props;
-    const { open, buttonDisable, loader } = this.state;
+    const { buttonDisable, loader } = this.state;
     return (
       <Dialog
         open={deleteOpen}
@@ -80,5 +79,16 @@ class DeleteDialog extends Component {
     );
   }
 }
+
+DeleteDialog.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  deleteOpen: PropTypes.bool,
+  details: PropTypes.arrayOf(PropTypes.object),
+};
+
+DeleteDialog.defaultProps = {
+  details: [],
+  deleteOpen: false,
+};
 
 export default DeleteDialog;
