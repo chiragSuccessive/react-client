@@ -23,8 +23,6 @@ const styles = {
 const handleLogOut = () => {
   // event.preventDefault();
   localStorage.removeItem('token');
-  console.log('---------------233-------------3443');
-
 };
 
 const Navbar = (props) => {
