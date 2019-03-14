@@ -64,7 +64,6 @@ class TraineeList extends Component {
 
   handleSubmit = (details, value) => {
     this.setState({ open: false });
-    console.log(details);
     value.openSnackBar('successfully added', 'success');
   };
 
