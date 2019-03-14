@@ -3,7 +3,6 @@ import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { GenericTable, DeleteDialog, EditDialog } from '../../components';
-import trainee from './data/trainee';
 import AddDialogue from './components/AddDialogue';
 import SnackbarContext from '../../contexts/contexts';
 import getDateFormatted from '../../libs/utils/moment';
@@ -56,7 +55,7 @@ class TraineeList extends Component {
   };
 
   handleDeleteClose = () => {
-    this.setState({ deleteOpen: false });
+    this.setState({ deleteOpen: false }, () => this.getApi());
   }
 
   handleEditClose = () => {
@@ -136,7 +135,7 @@ class TraineeList extends Component {
           <Button
             variant="outlined"
             color="primary"
-            onClick={this.handlopenSnackBareClickOpen}
+            onClick={this.handleClickOpen}
           >
             ADD TRAINEELIST
           </Button>
@@ -161,12 +160,22 @@ class TraineeList extends Component {
           loader={loader}
           dataLength={count}
         />
-        <DeleteDialog deleteOpen={deleteOpen} onClose={this.handleDeleteClose} details={traineeData} />
-        <EditDialog
-          editOpen={editOpen}
-          onClose={this.handleEditClose}
-          details={traineeData}
-        />
+        {
+          (traineeData)
+            ?
+            (
+              <>
+                <EditDialog
+                  editOpen={editOpen}
+                  onClose={this.handleEditClose}
+                  details={traineeData}
+                  reload={this.getApi}
+                />
+                <DeleteDialog deleteOpen={deleteOpen} onClose={this.handleDeleteClose} details={traineeData} />
+              </>
+            )
+            : ''
+        }
       </>
     );
   }

@@ -10,8 +10,9 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Email from '@material-ui/icons/Email';
 import Person from '@material-ui/icons/Person';
 import * as yup from 'yup';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import SnackBarContext from '../../contexts/contexts';
-
+import callApi from '../../libs/utils/api';
 
 const schema = yup.object().shape({
   name: yup
@@ -27,19 +28,21 @@ const schema = yup.object().shape({
 class EditDialog extends Component {
   constructor(props) {
     super(props);
+    const { details } = props;
     this.state = {
+      name: details.name,
+      email: details.email,
       buttonEnable: false,
       error: {
         name: '',
         email: '',
       },
+      loader: false,
     };
   }
 
   handleValue = item => (event) => {
-    const { details } = this.props;
     const { error } = this.state;
-    details[item] = event.target.value;
     this.setState({
       [item]: event.target.value,
       buttonEnable: true,
@@ -47,7 +50,7 @@ class EditDialog extends Component {
     }, this.handleValidation(item));
   };
 
-  handleValidation = (item) => {
+  handleValidation = item => () => {
     const {
       name,
       email,
@@ -74,18 +77,41 @@ class EditDialog extends Component {
       });
   }
 
-  onSubmit = (event) => {
+  handleOnClose = (event) => {
     event.preventDefault();
     const { details, onClose } = this.props;
-    const obj = { name: details.name, email: details.email };
-    console.log('Editted Item', obj);
+    this.setState({ name: details.name, email: details.email });
     onClose();
+  }
+
+  onSubmit = async (value) => {
+    const { details, onClose, reload } = this.props;
+    const { name, email } = this.state;
+    const header = localStorage.getItem('token');
+    const data = {
+      id: details.originalId,
+      name,
+      email,
+    };
+    this.setState({ loader: true, buttonEnable: false });
+    const res = await callApi('put', data, '/trainee', header);
+    if (res.status === 200) {
+      value.openSnackBar('Successfully updated', 'success');
+    } else {
+      value.openSnackBar('Updation unsuccessful', 'error');
+    }
+    this.setState({ loader: false, buttonEnable: true });
+    onClose();
+    reload();
   }
 
 
   render() {
     const { editOpen, onClose, details } = this.props;
-    const { buttonEnable, name, email, error } = this.state;
+    const {
+      buttonEnable, name, email, error, loader,
+    } = this.state;
+
     return (
       <>
         <Dialog open={editOpen} onClose={this.handleClose}>
@@ -94,7 +120,7 @@ class EditDialog extends Component {
             <DialogContentText>Enter your trainee details</DialogContentText>
             <TextField
               label="Name"
-              value={details.name}
+              value={name}
               margin="normal"
               variant="outlined"
               onChange={this.handleValue('name')}
@@ -114,10 +140,11 @@ class EditDialog extends Component {
             />
             <TextField
               label="Email Address"
-              value={details.email}
+              value={email}
               margin="normal"
               variant="outlined"
               onChange={this.handleValue('email')}
+              onBlur={this.handleValidation('email')}
               helperText={error.email}
               error={error.email}
               fullWidth
@@ -134,27 +161,29 @@ class EditDialog extends Component {
             />
           </DialogContent>
           <DialogActions>
-            <Button color="primary" onClick={onClose}>
+            <Button color="primary" onClick={event => this.handleOnClose(event)}>
                   Cancel
             </Button>
             <SnackBarContext.Consumer>
               {
-                value =>
-                  (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        this.onSubmit(event);
-                        value.openSnackBar('successfully updated', 'success');
-                      }}
-                      disabled={!buttonEnable}
-                    >
+                value => (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      this.onSubmit(value);
+                    }}
+                    disabled={!buttonEnable}
+                  >
+                    {
+                      (loader)
+                        ? <CircularProgress size={20} />
+                        : ''
+                    }
                   Submit
-                    </Button>
-                  )
-
+                  </Button>
+                )
               }
             </SnackBarContext.Consumer>
           </DialogActions>

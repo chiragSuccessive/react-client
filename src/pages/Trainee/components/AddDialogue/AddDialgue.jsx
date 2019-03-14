@@ -64,6 +64,7 @@ class AddDialogue extends Component {
         confirmPswd: false,
       },
       spinner: false,
+      // buttonDisable: true,
     };
   }
 
@@ -125,6 +126,8 @@ class AddDialogue extends Component {
           }
         });
       });
+    // this.setState({ buttonDisable: !(this.buttonChecked()) });
+    // const { buttonDisable } = this.state;
   };
 
   buttonChecked = () => {
@@ -159,9 +162,10 @@ class AddDialogue extends Component {
       password,
     } = this.state;
     const header = localStorage.getItem('token');
-    const res = await callApi('GET', { email, password }, '/trainee', header);
+    const res = await callApi('post', { name, email, password }, '/trainee', header);
+
     if (res.statusText === 'OK') {
-      this.setState({ spinner: false })
+      this.setState({ spinner: false });
     } else {
       this.setState({ spinner: false });
     }
@@ -178,7 +182,8 @@ class AddDialogue extends Component {
       showPassword,
       showMatchPassword,
       error,
-      spinner
+      spinner,
+      // buttonDisable
     } = this.state;
     return (
       <>
@@ -293,7 +298,7 @@ class AddDialogue extends Component {
               variant="contained"
               color="primary"
               onClick={this.onSubmit}
-              disabled={!this.buttonChecked()}
+              disabled={!(this.buttonChecked())}
             >
               {
                 (spinner)
