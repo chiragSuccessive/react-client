@@ -20,7 +20,6 @@ class Trainee extends Component {
 
   handleSubmit = (temp) => {
     this.setState({ open: false });
-    console.log(temp);
   }
 
   render() {

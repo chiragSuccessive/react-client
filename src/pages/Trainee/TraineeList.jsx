@@ -64,7 +64,6 @@ class TraineeList extends Component {
 
   handleSubmit = (details, value) => {
     this.setState({ open: false });
-    console.log(details);
     value.openSnackBar('successfully added', 'success');
   };
 
@@ -161,12 +160,22 @@ class TraineeList extends Component {
           loader={loader}
           dataLength={count}
         />
-        <DeleteDialog deleteOpen={deleteOpen} onClose={this.handleDeleteClose} details={traineeData} />
-        <EditDialog
-          editOpen={editOpen}
-          onClose={this.handleEditClose}
-          details={traineeData}
-        />
+        {
+          (traineeData)
+            ?
+            (
+              <>
+                <EditDialog
+                  editOpen={editOpen}
+                  onClose={this.handleEditClose}
+                  details={traineeData}
+                  reload={this.getApi}
+                />
+                <DeleteDialog deleteOpen={deleteOpen} onClose={this.handleDeleteClose} details={traineeData} />
+              </>
+            )
+            : ''
+        }
       </>
     );
   }
