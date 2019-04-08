@@ -32,7 +32,6 @@ const Math = (props) => {
     return children(first, second, operator, result);
   }
   return <div>{`${first} ${operator} ${second} = ${result}`}</div>;
-
 };
 
 Math.propTypes = {
